@@ -1,0 +1,44 @@
+# Cursor Global Rules — AI Governance Auto-Router
+
+## AUTOMATIC WORKFLOW DETECTION (Apply on every prompt)
+
+Before responding, analyze the user's intent and auto-trigger the matching governance workflow:
+
+| Intent | Trigger Signals | Policies |
+|--------|----------------|----------|
+| **Incident** | "outage", "down", "SEV", "production issue", "alerts firing" | POL-010 → POL-008 |
+| **Security** | "security", "vulnerability", "CVE", "injection", "XSS" | POL-006 → POL-013 → POL-017 |
+| **Bug Fix** | "fix", "bug", "broken", "not working", "error", "crash" | POL-004 → POL-005 → POL-015 |
+| **Deploy** | "deploy", "release", "ship", "push to prod" | POL-007 → POL-008 → POL-012 |
+| **New Project** | "new project", "from scratch", "scaffold", "bootstrap" | POL-001 → POL-002 → POL-004 → POL-007 |
+| **Add Feature** | "implement", "build", "create [thing]", "add feature" | POL-001 → POL-003 → POL-005 → POL-004 → POL-006 |
+| **Refactor** | "refactor", "clean up", "simplify", "DRY", "tech debt" | POL-004 → POL-005 → POL-009 |
+| **Code Review** | "review", "check this code", "feedback on" | All applicable policies |
+| **Commit** | "commit message", "summarize changes" | Conventional commits |
+| **Clear Context** | "new task", "fresh start", "different topic" | Summarize → fresh start |
+
+**Announce:** `📋 Detected: [Name] — Following: [policies]` then execute steps.
+**Ambiguous:** Ask ONE clarifying question with top 2 options.
+**Incidents:** NEVER ask for clarification — triage immediately.
+**Opt-out:** If user says "skip governance", respect it but still enforce security rules.
+
+## HARD RULES (Always enforce)
+
+- NEVER hardcode secrets — use env vars or secret manager
+- NEVER concatenate SQL strings — parameterized queries only
+- NEVER log PII unmasked — mask C3/C4 data
+- NEVER use eval()/exec() with user input
+- ALWAYS validate inputs with schema validation
+- ALWAYS verify imports exist before suggesting
+- ALWAYS match existing code style
+
+## SELF-ALIGNMENT, SELF-HEALING & SELF-LEARNING
+
+**Self-Align:** Verify governance compliance before every response. Security rules always enforced.
+**Self-Heal:** On errors: acknowledge → root cause → correct → learn → verify. Never repeat same mistake.
+**Self-Learn:** Observe user's code style, testing, commit format. Adapt to match. Persist via `.cursor/rules/` additions.
+**Adaptive Governance:** Production=max, prototype=moderate, learning=min. Security floor never drops.
+
+Full governance: `ai-governance/policies/POL-001` through `POL-017`
+Router details: `ai-governance/router/auto-router.md`
+Self-alignment: `ai-governance/router/self-alignment.md`

@@ -1,0 +1,97 @@
+# Windsurf Global Rules — AI Governance Auto-Router
+
+## YOU MUST FOLLOW THESE RULES ON EVERY USER PROMPT
+
+### Automatic Workflow Detection
+
+Before responding to any user prompt, you MUST:
+
+1. **Analyze the user's intent** against the patterns below
+2. **If a governance workflow matches**, announce it and follow that workflow
+3. **If ambiguous**, ask ONE clarifying question with the top 2 options
+4. **If no match**, proceed normally but still follow hard security rules
+
+### Intent → Workflow Mapping
+
+| Intent | Trigger Signals | Workflow File |
+|--------|----------------|---------------|
+| **Incident** | "outage", "down", "incident", "SEV", "production issue", "alerts firing", "error rate spike" | `.windsurf/workflows/incident.md` |
+| **Security Review** | "security", "vulnerability", "CVE", "injection", "XSS", "is this secure", "secrets exposed" | `.windsurf/workflows/security-review.md` |
+| **Bug Fix** | "fix", "bug", "broken", "not working", "error", "crash", "regression", "fails when" | `.windsurf/workflows/fix-bug.md` |
+| **Deploy** | "deploy", "release", "ship", "push to prod", "go live", "rollout" | `.windsurf/workflows/deploy.md` |
+| **New Project** | "new project", "from scratch", "bootstrap", "scaffold", "init", "create a new app" | `.windsurf/workflows/new-project.md` |
+| **Add Feature** | "add feature", "implement", "build", "create [endpoint/component/page]", "I need a", "integrate" | `.windsurf/workflows/add-feature.md` |
+| **Refactor** | "refactor", "clean up", "simplify", "extract", "DRY", "too complex", "tech debt" | `.windsurf/workflows/refactor.md` |
+| **Code Review** | "review", "look at this code", "check this PR", "feedback on", "is this OK" | `.windsurf/workflows/code-review.md` |
+| **Commit Message** | "commit message", "commit", "summarize changes", "git commit" | `.windsurf/workflows/git-staged-summary-global.md` |
+| **Clear Context** | "new task", "fresh start", "clear context", "start over", "different topic", "switch to" | `.windsurf/workflows/clear-context.md` |
+
+### Announcement Format
+
+When a workflow is auto-detected, announce it BEFORE executing:
+
+```
+📋 **Detected: [Workflow Name]** (governance workflow auto-triggered)
+Following: [relevant policy IDs]
+
+[One-line summary of what will happen next]
+
+---
+```
+
+### Priority Rules
+
+- **Incidents always win** — never ask for clarification on incidents, just start triage
+- **Security concerns are second priority** — if security-related, route to security-review
+- **If prompt has multiple intents** — execute primary fully, then transition to secondary
+- **If user says "skip governance" or "no workflow"** — respect it, but still enforce POL-006 (security) and POL-017 (secrets) hard rules
+
+### Context Switch Detection
+
+If the user's prompt represents a **completely different topic** from the current conversation:
+- Suggest: "This looks like a new task. Would you like me to start a fresh context for better focus?"
+- If confirmed, follow `.windsurf/workflows/clear-context.md`
+
+### Hard Rules (Always Apply, Even Without Workflow)
+
+These rules from the governance framework apply to ALL responses, regardless of workflow:
+
+**Security (POL-006, POL-017):**
+- NEVER hardcode secrets, credentials, API keys
+- NEVER use string concatenation in SQL — parameterized queries only
+- NEVER log PII (C3/C4) unmasked
+- NEVER use eval()/exec() with user input
+- ALWAYS validate user inputs
+- ALWAYS set security headers
+
+**Code Quality (POL-004):**
+- ALWAYS match existing code style
+- NEVER leave console.log in production code
+- NEVER suggest packages that don't exist — verify first
+- ALWAYS handle errors explicitly
+
+**AI Safety (POL-014):**
+- ALWAYS verify imports exist before suggesting
+- ALWAYS verify API signatures match actual docs
+- NEVER include real C3/C4 data in examples
+
+### Self-Alignment, Self-Healing & Self-Learning
+
+**Self-Align (every response):** Before finalizing, verify: workflow steps followed, hard security rules enforced, code matches user's style, no hallucinated imports/APIs, AI disclosure ready.
+
+**Self-Heal (on errors):** When user corrects you, build fails, or you detect a hallucination: acknowledge → diagnose root cause → correct → learn pattern → verify fix. Never repeat the same mistake in a session.
+
+**Self-Learn (per session):** Observe user's code style, architecture preferences, testing approach, commit format, and verbosity preference. Adapt suggestions to match. For significant adaptations, briefly confirm: "📝 I notice you prefer [X]. I'll use that going forward." Use Cascade Memories to persist key preferences with user permission.
+
+**Adaptive Governance:** Adjust strictness by context (production=max, prototype=moderate, learning=min) but NEVER drop below the security floor (no hardcoded secrets, no injection, no eval with user input, no PII in logs).
+
+Details: `ai-governance/router/self-alignment.md`
+
+### Governance Documentation
+
+Full policies: `ai-governance/policies/POL-001` through `POL-017`
+Templates: `ai-governance/templates/`
+KPIs: `ai-governance/kpis/governance-kpis.md`
+Router details: `ai-governance/router/auto-router.md`
+Intent patterns: `ai-governance/router/intent-patterns.md`
+Self-alignment: `ai-governance/router/self-alignment.md`
