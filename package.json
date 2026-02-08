@@ -28,9 +28,18 @@
     "claude",
     "aider",
     "policies",
-    "enterprise"
+    "devtools"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chasesaurabh/ai-governance.git"
+  },
+  "homepage": "https://github.com/chasesaurabh/ai-governance",
+  "author": "chasesaurabh",
   "license": "MIT",
+  "engines": {
+    "node": ">=16.7.0"
+  },
   "dependencies": {
     "inquirer": "^9.2.0"
   }

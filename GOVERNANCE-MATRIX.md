@@ -43,7 +43,7 @@ npx ai-governance-setup
 
 Or via shell script:
 ```bash
-git clone https://github.com/<org>/AIGovernance.git
+git clone https://github.com/chasesaurabh/ai-governance.git
 cd AIGovernance && ./install.sh /path/to/your-project
 ```
 

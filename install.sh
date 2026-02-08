@@ -12,8 +12,8 @@ set -euo pipefail
 #     ./install.sh /path/to/my-project    # Install to specific project
 #
 #   From GitHub (no clone needed):
-#     curl -sL https://raw.githubusercontent.com/<org>/AIGovernance/main/install.sh | bash
-#     curl -sL https://raw.githubusercontent.com/<org>/AIGovernance/main/install.sh | bash -s -- /path/to/project
+#     curl -sL https://raw.githubusercontent.com/chasesaurabh/ai-governance/main/install.sh | bash
+#     curl -sL https://raw.githubusercontent.com/chasesaurabh/ai-governance/main/install.sh | bash -s -- /path/to/project
 #
 #   Non-interactive (CI/automation):
 #     ./install.sh --all /path/to/project           # Install all adapters
@@ -22,7 +22,7 @@ set -euo pipefail
 # ============================================================================
 
 VERSION="1.0.0"
-REPO_URL="https://github.com/<org>/AIGovernance"  # UPDATE: Set your GitHub org/repo
+REPO_URL="https://github.com/chasesaurabh/ai-governance"
 BRANCH="main"
 
 # Colors (disable if not a terminal)
