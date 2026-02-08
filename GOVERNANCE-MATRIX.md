@@ -36,12 +36,26 @@
 
 ### How to Adopt
 
+**One-command install** (recommended):
+```bash
+npx ai-governance-setup
+```
+
+Or via shell script:
+```bash
+git clone https://github.com/<org>/AIGovernance.git
+cd AIGovernance && ./install.sh /path/to/your-project
+```
+
+Or manually:
 1. **Copy `ai-governance/`** directory to your project (this is the core, includes router)
 2. **Copy the auto-router file** for your AI tool (`.windsurfrules`, `.cursorrules`, `CLAUDE.md`, etc.)
 3. **Just start typing** — the auto-router detects intent and triggers workflows automatically
 4. **Configure CI/CD** enforcement per your pipeline tool
 5. **Configure VCS** branch protection and PR templates
 6. **Customize** policies to your organization's needs
+
+See `install.sh --help` for all options including non-interactive mode.
 
 ---
 

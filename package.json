@@ -1,0 +1,37 @@
+{
+  "name": "ai-governance-setup",
+  "version": "1.0.0",
+  "description": "One-command setup for AI Governance Framework — enforceable policies for AI coding assistants",
+  "type": "module",
+  "bin": {
+    "ai-governance-setup": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "ai-governance/",
+    ".windsurf/",
+    ".windsurfrules",
+    ".cursor/",
+    ".cursorrules",
+    ".github/copilot-instructions.md",
+    ".aider/",
+    "CLAUDE.md",
+    "GOVERNANCE-MATRIX.md"
+  ],
+  "keywords": [
+    "ai",
+    "governance",
+    "coding-assistant",
+    "windsurf",
+    "cursor",
+    "copilot",
+    "claude",
+    "aider",
+    "policies",
+    "enterprise"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^9.2.0"
+  }
+}
