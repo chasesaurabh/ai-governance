@@ -102,7 +102,10 @@ The router is embedded in every tool adapter:
 | Resource | Purpose |
 |----------|---------|
 | [KPIs Dashboard](./kpis/governance-kpis.md) | 60+ measurable targets across all policies |
-| [Red Team Report](./red-team/bypass-report.md) | 15 bypass attempts with patches |
-| [Exceptions Log](./exceptions-log.md) | Active policy exceptions register |
+| [Exceptions Log](./exceptions-log.md) | Active policy exceptions register + exception proposal process |
 | [Governance Matrix](../GOVERNANCE-MATRIX.md) | Tool compatibility and enforcement layers |
+| [Router Test Suite](../examples/router-tests.md) | 50-prompt intent classification validation |
+| [Workflow Examples](../examples/) | Evaluable walkthroughs (feature, bugfix, security, incident) |
+| [CI Templates](../examples/ci/) | GitHub Actions + Azure DevOps governance gates |
+| [Changelog](../CHANGELOG.md) | Version history and change log |
 

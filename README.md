@@ -14,12 +14,14 @@ Run this in your project:
 npx ai-governance-setup
 ```
 
+The setup wizard asks which AI tools you use, then installs the core policies and selected adapters. Use `--all` or `--core-only` flags for non-interactive mode (see `install.sh --help`).
+
 <details>
 <summary>Alternative: shell script</summary>
 
 ```bash
 git clone https://github.com/chasesaurabh/ai-governance.git
-cd AIGovernance && ./install.sh /path/to/your-project
+cd ai-governance && ./install.sh /path/to/your-project
 ```
 
 Non-interactive: `./install.sh --all /path` · `./install.sh --tools windsurf,cursor /path` · `./install.sh --core-only /path`
@@ -58,11 +60,26 @@ The framework includes an **auto-router** that reads your prompt, detects what y
 
 Each policy has an objective, enforceable controls, evidence artifacts, an owner, and an exception path. See `ai-governance/INDEX.md` for the full navigation guide.
 
+## Enforcement Model
+
+Adapters provide guidance and auto-routing behavior, but **enforcement ultimately depends on the tool, team discipline, and CI gates**.
+
+| Layer | Role |
+|-------|------|
+| **AI IDE adapters** | Advisory — guides correct behavior at authoring time |
+| **Pre-commit hooks** | Blocking — catches secrets and lint issues locally |
+| **CI pipeline** | **Enforcement** — SAST, coverage gates, dependency scanning on every PR |
+| **PR review + templates** | Human verification with structured checklists |
+| **Runtime controls** | WAF, secret managers, monitoring, alerting |
+
+IDE rules guide. CI gates enforce. See `GOVERNANCE-MATRIX.md` for full enforcement mapping and `examples/ci/` for ready-to-use pipeline templates.
+
 ## After Install
 
 1. **Start coding** — governance loads automatically in your AI tool
 2. **Customize** policies in `ai-governance/policies/` to fit your team (optional)
-3. **Commit** the governance files to your repo
+3. **Set up CI enforcement** — use templates in `examples/ci/` to wire governance into your pipeline (recommended)
+4. **Commit** the governance files to your repo
 
 ## Contributing
 

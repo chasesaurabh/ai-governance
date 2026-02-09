@@ -21,7 +21,7 @@ set -euo pipefail
 #     ./install.sh --core-only /path                 # Core policies only, no adapters
 # ============================================================================
 
-VERSION="1.0.0"
+VERSION="1.0.1"
 REPO_URL="https://github.com/chasesaurabh/ai-governance"
 BRANCH="main"
 

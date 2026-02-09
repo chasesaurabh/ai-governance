@@ -55,7 +55,6 @@ Determine which quality gate SHOULD have caught this bug:
 3. Handle edge cases discovered during investigation
 4. Follow coding standards (no banned patterns, proper error handling)
 
-// turbo
 5. Run full test suite — regression test should now PASS, nothing else should break
 
 ## Step 6: Security & Data Check

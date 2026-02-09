@@ -23,7 +23,6 @@ AIGovernance/
 │   ├── templates/              # 7 reusable templates
 │   ├── router/                 # Auto-routing engine + self-alignment
 │   ├── kpis/                   # Measurable targets
-│   ├── red-team/               # Bypass testing report
 │   └── INDEX.md                # Navigation guide
 ├── .windsurf/workflows/        # 10 Windsurf workflows (ADAPTER)
 ├── .windsurfrules              # Windsurf auto-router (ADAPTER)
@@ -32,7 +31,17 @@ AIGovernance/
 ├── .github/                    # GitHub Copilot instructions (ADAPTER)
 ├── .aider/                     # Aider conventions (ADAPTER)
 ├── CLAUDE.md                   # Claude Code instructions (ADAPTER)
+├── examples/                   # Evaluable workflow demos + CI templates
+│   ├── feature.md              # Feature workflow walkthrough
+│   ├── bugfix.md               # Bug fix workflow walkthrough
+│   ├── security-review.md      # Security review walkthrough
+│   ├── incident.md             # Incident response walkthrough
+│   ├── router-tests.md         # 50-prompt router validation suite
+│   └── ci/                     # CI/CD enforcement templates
+│       ├── github-actions/     # GitHub Actions governance gates
+│       └── azure-devops/       # Azure DevOps governance gates
 ├── GOVERNANCE-MATRIX.md        # Tool compatibility matrix
+├── CHANGELOG.md                # Version history and change log
 └── README.md
 ```
 

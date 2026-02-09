@@ -10,7 +10,6 @@
 │  ai-governance/policies/   - 17 enforceable policies       │
 │  ai-governance/templates/  - 7 reusable templates          │
 │  ai-governance/kpis/       - measurable targets            │
-│  ai-governance/red-team/   - bypass testing                │
 │  ai-governance/router/     - auto-routing engine           │
 └──────────────────────┬──────────────────────────────────┘
                        │
@@ -44,7 +43,7 @@ npx ai-governance-setup
 Or via shell script:
 ```bash
 git clone https://github.com/chasesaurabh/ai-governance.git
-cd AIGovernance && ./install.sh /path/to/your-project
+cd ai-governance && ./install.sh /path/to/your-project
 ```
 
 Or manually:

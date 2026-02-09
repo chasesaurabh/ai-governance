@@ -1,0 +1,175 @@
+# AI Governance — GitHub Actions CI Gates
+# Enforces POL-004 (Coding Standards), POL-005 (Testing), POL-006 (Security), POL-017 (Secrets)
+#
+# Usage:
+#   1. Copy this file to .github/workflows/governance-gates.yml in your project
+#   2. Adjust language, test commands, and coverage thresholds to match your stack
+#   3. Enable branch protection: require this workflow to pass before merge
+#
+# This makes governance enforceable — IDE adapters guide, this pipeline blocks.
+
+name: Governance Gates
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── POL-004: Coding Standards ─────────────────────────────────────────────
+  lint:
+    name: "POL-004: Lint & Format"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+
+      # Replace with your project's lint command
+      - name: Lint
+        run: npm run lint
+
+      # Replace with your project's format check command
+      - name: Format check
+        run: npm run format:check || true  # Remove '|| true' once formatter is configured
+
+  # ── POL-005: Testing ──────────────────────────────────────────────────────
+  test:
+    name: "POL-005: Test & Coverage"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+
+      # Replace with your project's test command
+      - name: Unit & Integration Tests
+        run: npm test -- --coverage
+
+      # Coverage gate — adjust threshold to match your team's target
+      # POL-005 recommends: ≥ 80% line coverage for new code
+      - name: Coverage gate
+        run: |
+          COVERAGE=$(npx coverage-summary --json | jq '.total.lines.pct')
+          echo "Coverage: ${COVERAGE}%"
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "::error::Coverage ${COVERAGE}% is below the 80% gate (POL-005)"
+            exit 1
+          fi
+        continue-on-error: false  # Set to true if ramping up coverage gradually
+
+  # ── POL-006: Security — SAST ──────────────────────────────────────────────
+  sast:
+    name: "POL-006: SAST Scan"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Option 1: CodeQL (free for public repos, included with GitHub Advanced Security)
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript  # Adjust: python, java, csharp, go, ruby, etc.
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      # Option 2: Semgrep (free, supports custom rules)
+      # Uncomment below and comment out CodeQL if preferred
+      # - name: Semgrep SAST
+      #   uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: >-
+      #       p/default
+      #       p/owasp-top-ten
+      #       p/javascript
+
+  # ── POL-006: Dependency Audit ─────────────────────────────────────────────
+  dependency-audit:
+    name: "POL-006: Dependency Audit"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+
+      # Fail on high/critical vulnerabilities
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
+  # ── POL-017: Secret Scanning ──────────────────────────────────────────────
+  secrets:
+    name: "POL-017: Secret Scanning"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for scanning
+
+      # Gitleaks — detects hardcoded secrets in git history
+      - name: Gitleaks scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── POL-014: AI Usage Disclosure Check ────────────────────────────────────
+  ai-disclosure:
+    name: "POL-014: AI Disclosure Check"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      # Check if PR body contains AI disclosure section
+      # Customize the pattern to match your team's disclosure format
+      - name: Check AI disclosure in PR
+        run: |
+          PR_BODY="${{ github.event.pull_request.body }}"
+          if echo "$PR_BODY" | grep -qi "ai.assist\|ai.usage\|ai.disclosure\|copilot\|cursor\|windsurf\|claude\|chatgpt"; then
+            echo "✓ AI usage disclosure detected in PR description"
+          else
+            echo "::notice::No AI disclosure detected. If AI tools were used, please add a disclosure per POL-014."
+          fi
+        # This is advisory (notice, not error). Change to 'exit 1' to make it blocking.
+
+  # ── Summary Gate ──────────────────────────────────────────────────────────
+  governance-pass:
+    name: "All Governance Gates"
+    needs: [lint, test, sast, dependency-audit, secrets]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check gate results
+        run: |
+          if [[ "${{ needs.lint.result }}" == "failure" ]] || \
+             [[ "${{ needs.test.result }}" == "failure" ]] || \
+             [[ "${{ needs.sast.result }}" == "failure" ]] || \
+             [[ "${{ needs.dependency-audit.result }}" == "failure" ]] || \
+             [[ "${{ needs.secrets.result }}" == "failure" ]]; then
+            echo "::error::One or more governance gates failed. Merge is blocked."
+            exit 1
+          fi
+          echo "✓ All governance gates passed"

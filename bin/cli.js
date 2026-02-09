@@ -119,7 +119,7 @@ async function main() {
   console.log(bold('  +---------------------------------------------------+'));
   console.log('');
   console.log(dim('  17 enforceable policies | 7 templates | Auto-router'));
-  console.log(dim('  Self-alignment | KPI dashboard | Red-team tested'));
+  console.log(dim('  Self-alignment | KPI dashboard | CI-ready'));
   console.log('');
 
   // ── Detect re-run ─────────────────────────────────────────────────────

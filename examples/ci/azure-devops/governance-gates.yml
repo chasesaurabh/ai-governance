@@ -1,0 +1,153 @@
+# AI Governance — Azure DevOps Pipeline Gates
+# Enforces POL-004 (Coding Standards), POL-005 (Testing), POL-006 (Security), POL-017 (Secrets)
+#
+# Usage:
+#   1. Copy this file to your Azure DevOps project as a pipeline YAML
+#   2. Adjust language, test commands, and coverage thresholds to match your stack
+#   3. Set as a required pipeline in branch policies to block merges on failure
+#
+# This makes governance enforceable — IDE adapters guide, this pipeline blocks.
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+
+pr:
+  branches:
+    include:
+      - main
+      - develop
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  nodeVersion: "20.x"
+  coverageThreshold: 80
+
+stages:
+  # ── POL-004: Coding Standards ───────────────────────────────────────────
+  - stage: Lint
+    displayName: "POL-004: Lint & Format"
+    jobs:
+      - job: LintJob
+        displayName: "Lint and format check"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          - script: npm ci
+            displayName: "Install dependencies"
+
+          # Replace with your project's lint command
+          - script: npm run lint
+            displayName: "Run linter"
+
+          # Replace with your project's format check
+          - script: npm run format:check
+            displayName: "Check formatting"
+            continueOnError: true  # Remove once formatter is configured
+
+  # ── POL-005: Testing ────────────────────────────────────────────────────
+  - stage: Test
+    displayName: "POL-005: Test & Coverage"
+    dependsOn: Lint
+    jobs:
+      - job: TestJob
+        displayName: "Unit & integration tests"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          - script: npm ci
+            displayName: "Install dependencies"
+
+          # Replace with your project's test command
+          - script: npm test -- --coverage --ci
+            displayName: "Run tests with coverage"
+
+          # Publish test results (adjust path to your test output)
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: "JUnit"
+              testResultsFiles: "**/junit.xml"
+            condition: always()
+
+          # Publish coverage (adjust path to your coverage output)
+          - task: PublishCodeCoverageResults@2
+            inputs:
+              summaryFileLocation: "**/coverage/cobertura-coverage.xml"
+            condition: always()
+
+          # Coverage gate
+          - script: |
+              COVERAGE=$(npx coverage-summary --json | jq '.total.lines.pct')
+              echo "Coverage: ${COVERAGE}%"
+              if (( $(echo "$COVERAGE < $(coverageThreshold)" | bc -l) )); then
+                echo "##vso[task.logissue type=error]Coverage ${COVERAGE}% is below the $(coverageThreshold)% gate (POL-005)"
+                exit 1
+              fi
+            displayName: "Coverage gate ($(coverageThreshold)%)"
+
+  # ── POL-006: Security — SAST ────────────────────────────────────────────
+  - stage: Security
+    displayName: "POL-006: Security Scanning"
+    dependsOn: Lint
+    jobs:
+      - job: SASTJob
+        displayName: "SAST scan"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          - script: npm ci
+            displayName: "Install dependencies"
+
+          # Option 1: npm audit for dependency vulnerabilities
+          - script: npm audit --audit-level=high
+            displayName: "POL-006: Dependency audit"
+
+          # Option 2: Semgrep (install and run)
+          # Uncomment if using Semgrep
+          # - script: |
+          #     pip install semgrep
+          #     semgrep --config=p/default --config=p/owasp-top-ten --error .
+          #   displayName: "Semgrep SAST scan"
+
+  # ── POL-017: Secret Scanning ────────────────────────────────────────────
+  - stage: Secrets
+    displayName: "POL-017: Secret Scanning"
+    dependsOn: []  # Runs in parallel with other stages
+    jobs:
+      - job: SecretsJob
+        displayName: "Gitleaks scan"
+        steps:
+          - checkout: self
+            fetchDepth: 0  # Full history
+
+          # Install and run Gitleaks
+          - script: |
+              wget -q https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_8.18.0_linux_x64.tar.gz
+              tar -xzf gitleaks_8.18.0_linux_x64.tar.gz
+              ./gitleaks detect --source . --verbose
+            displayName: "Gitleaks secret scan"
+
+  # ── Summary ─────────────────────────────────────────────────────────────
+  - stage: GovernanceGate
+    displayName: "All Governance Gates"
+    dependsOn:
+      - Lint
+      - Test
+      - Security
+      - Secrets
+    jobs:
+      - job: Summary
+        displayName: "Gate summary"
+        steps:
+          - script: echo "✓ All governance gates passed — merge is allowed"
+            displayName: "Governance check passed"
