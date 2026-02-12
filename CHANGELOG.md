@@ -6,6 +6,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Policy 
 
 ---
 
+## [1.1.0] — 2026-02-11
+
+### Added
+- **`ai-governance/GOVERNANCE-RULES.md`** — single source of truth for auto-router, hard rules, self-alignment (eliminates duplication across 5 adapter files)
+
+### Changed
+- **`.windsurfrules`** — rewritten for Windsurf/Cascade: explicit `read_file` instructions to load shared rules and workflow files, Cascade tool usage guide (`code_search`, `edit`, `run_command`, `create_memory`), `// turbo` awareness. **Fixes auto-trigger issue.**
+- **`.cursorrules`** — rewritten for Cursor: references shared rules, mode-specific guidance (Composer / Chat / Inline edit), `@` mention patterns, `.cursor/rules/` persistence
+- **`.cursor/rules/governance.md`** — rewritten as Cursor mode-specific supplement (no longer duplicates `.cursorrules`)
+- **`CLAUDE.md`** — rewritten for Claude Code CLI: references shared rules, bash commands for verification, `#` file references, `/clear` and `/compact` commands, `CLAUDE.md` tree for subdirectory instructions
+- **`.github/copilot-instructions.md`** — rewritten for GitHub Copilot: inline completion rules (do/don't), Copilot Chat auto-router, `@workspace` guidance. Hard rules kept inline (Copilot can't auto-read files)
+- **`.aider/conventions.md`** — rewritten for Aider CLI: `/add` to load policies, `/run`/`/test`/`/lint` for verification, `/architect` for design-first, git-aware auto-commit guidance. Hard rules kept inline
+- README.md — updated Supported Tools table with tool-specific descriptions
+- CONTRIBUTING.md — added Adapter Architecture section, updated framework structure tree
+- GOVERNANCE-MATRIX.md — updated auto-router section and tool adapter table for shared rules architecture, updated Quick Setup
+- `ai-governance/INDEX.md` — added `GOVERNANCE-RULES.md` to auto-router section, added adapter architecture table
+
+### Architecture
+- **Before:** 5 adapter files contained near-identical copies of auto-router, hard rules, and self-alignment (~100 lines duplicated per file)
+- **After:** Shared rules in one file + 5 lean tool-specific adapters. Each adapter contains only instructions relevant to that tool's actual capabilities and limitations
+
+---
+
 ## [1.0.1] — 2026-02-08
 
 ### Added

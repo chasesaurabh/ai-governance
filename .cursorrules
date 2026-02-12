@@ -1,44 +1,81 @@
-# Cursor Global Rules — AI Governance Auto-Router
+# Cursor Rules — AI Governance Framework
 
-## AUTOMATIC WORKFLOW DETECTION (Apply on every prompt)
+> These rules are specific to **Cursor**. Shared governance rules live in
+> `ai-governance/GOVERNANCE-RULES.md` — read that file for the full auto-router,
+> hard rules, and self-alignment instructions.
 
-Before responding, analyze the user's intent and auto-trigger the matching governance workflow:
+## MANDATORY: Load Governance
 
-| Intent | Trigger Signals | Policies |
-|--------|----------------|----------|
-| **Incident** | "outage", "down", "SEV", "production issue", "alerts firing" | POL-010 → POL-008 |
-| **Security** | "security", "vulnerability", "CVE", "injection", "XSS" | POL-006 → POL-013 → POL-017 |
-| **Bug Fix** | "fix", "bug", "broken", "not working", "error", "crash" | POL-004 → POL-005 → POL-015 |
-| **Deploy** | "deploy", "release", "ship", "push to prod" | POL-007 → POL-008 → POL-012 |
-| **New Project** | "new project", "from scratch", "scaffold", "bootstrap" | POL-001 → POL-002 → POL-004 → POL-007 |
-| **Add Feature** | "implement", "build", "create [thing]", "add feature" | POL-001 → POL-003 → POL-005 → POL-004 → POL-006 |
-| **Refactor** | "refactor", "clean up", "simplify", "DRY", "tech debt" | POL-004 → POL-005 → POL-009 |
-| **Code Review** | "review", "check this code", "feedback on" | All applicable policies |
-| **Commit** | "commit message", "summarize changes" | Conventional commits |
-| **Clear Context** | "new task", "fresh start", "different topic" | Summarize → fresh start |
+On your **first response in any conversation**, read these files to load governance rules:
+1. `ai-governance/GOVERNANCE-RULES.md` — auto-router, hard rules, self-alignment
 
-**Announce:** `📋 Detected: [Name] — Following: [policies]` then execute steps.
-**Ambiguous:** Ask ONE clarifying question with top 2 options.
-**Incidents:** NEVER ask for clarification — triage immediately.
-**Opt-out:** If user says "skip governance", respect it but still enforce security rules.
+Then follow the auto-router on every subsequent prompt.
 
-## HARD RULES (Always enforce)
+## How Cursor Executes Governance
 
-- NEVER hardcode secrets — use env vars or secret manager
-- NEVER concatenate SQL strings — parameterized queries only
-- NEVER log PII unmasked — mask C3/C4 data
-- NEVER use eval()/exec() with user input
-- ALWAYS validate inputs with schema validation
-- ALWAYS verify imports exist before suggesting
-- ALWAYS match existing code style
+Cursor does **not** have a workflow file system. Instead, governance is enforced through rules files and inline guidance.
 
-## SELF-ALIGNMENT, SELF-HEALING & SELF-LEARNING
+When the auto-router (from GOVERNANCE-RULES.md) detects an intent:
 
-**Self-Align:** Verify governance compliance before every response. Security rules always enforced.
-**Self-Heal:** On errors: acknowledge → root cause → correct → learn → verify. Never repeat same mistake.
-**Self-Learn:** Observe user's code style, testing, commit format. Adapt to match. Persist via `.cursor/rules/` additions.
-**Adaptive Governance:** Production=max, prototype=moderate, learning=min. Security floor never drops.
+1. **Announce** the detected workflow (format in GOVERNANCE-RULES.md)
+2. **Read the relevant policies** from `ai-governance/policies/` for the detected intent
+3. **Follow the task routing steps** defined in GOVERNANCE-RULES.md (Task Routing — Policy Chains)
+4. Use Cursor's tools to implement changes and verify
 
-Full governance: `ai-governance/policies/POL-001` through `POL-017`
-Router details: `ai-governance/router/auto-router.md`
-Self-alignment: `ai-governance/router/self-alignment.md`
+### Intent → Policy Files to Read
+
+| Intent | Read These Policies |
+|--------|-------------------|
+| Incident | `ai-governance/policies/POL-010-incident-response.md`, `POL-008-observability.md` |
+| Security Review | `POL-006-security-privacy.md`, `POL-013-data-classification.md`, `POL-017-secrets-management.md` |
+| Bug Fix | `POL-004-coding-standards.md`, `POL-005-testing.md` |
+| Deploy | `POL-007-deployment.md`, `POL-012-change-management.md` |
+| New Project | `POL-001-requirements.md`, `POL-002-architecture.md`, `POL-004-coding-standards.md` |
+| Add Feature | `POL-001-requirements.md`, `POL-003-design.md`, `POL-005-testing.md`, `POL-004-coding-standards.md`, `POL-006-security-privacy.md` |
+| Refactor | `POL-004-coding-standards.md`, `POL-005-testing.md` |
+| Code Review | All applicable |
+
+## Cursor-Specific Capabilities
+
+### Composer Mode (Multi-File Editing)
+- Composer is Cursor's agentic mode — use it for multi-file changes
+- Can create, edit, and delete files across the project
+- Can run terminal commands for verification (linting, testing)
+- Best for: feature implementation, refactoring, bug fixes
+
+### Chat Mode (Conversation)
+- For discussion, code review, architecture decisions, debugging
+- Use `@file` to reference specific files in conversation
+- Use `@folder` to reference a directory
+- Use `@codebase` for broad codebase questions
+- Best for: code review, security review, incident triage, design discussions
+
+### Inline Editing (Cmd+K)
+- For quick, focused single-location edits
+- Best for: small bug fixes, renaming, quick refactors
+
+### Terminal Integration
+- Run commands via Composer for verification
+- After code changes: run linter/formatter
+- After implementation: run the project's test suite
+
+## Persistence (Self-Learn)
+
+Cursor persists preferences via `.cursor/rules/` files:
+- When you learn a user preference (code style, testing approach, etc.), suggest creating a rule file
+- Example: `.cursor/rules/user-preferences.md` for code style, frameworks, and patterns
+- Always ask user permission before creating or modifying rule files
+- Rules in `.cursor/rules/` are auto-loaded on every interaction
+
+## When No Workflow Matches
+
+- Still enforce the hard rules from `ai-governance/GOVERNANCE-RULES.md`
+- Help the user normally — don't force a workflow
+- If the work evolves into a recognizable intent, trigger mid-conversation
+
+## Quick Reference
+
+- **Shared rules:** `ai-governance/GOVERNANCE-RULES.md` (MUST read on first interaction)
+- **Policies:** `ai-governance/policies/POL-001` through `POL-017`
+- **Templates:** `ai-governance/templates/`
+- **Router details:** `ai-governance/router/auto-router.md`

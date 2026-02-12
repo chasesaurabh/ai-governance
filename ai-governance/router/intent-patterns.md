@@ -29,8 +29,8 @@ Patterns:
 - User describes a complete system, not a modification
 - No existing source code referenced
 
-**Maps to:** `.windsurf/workflows/new-project.md`
 **Policies:** POL-001 → POL-002 → POL-004 → POL-005 → POL-006 → POL-007
+**Windsurf workflow:** `.windsurf/workflows/new-project.md`
 
 ---
 
@@ -60,8 +60,8 @@ Patterns:
 **Disambiguation from NEW_PROJECT:** Existing code files present, user references current codebase
 **Disambiguation from BUG_FIX:** User describes desired state, not broken state
 
-**Maps to:** `.windsurf/workflows/add-feature.md`
 **Policies:** POL-001 → POL-003 → POL-005 → POL-004 → POL-006
+**Windsurf workflow:** `.windsurf/workflows/add-feature.md`
 
 ---
 
@@ -94,8 +94,8 @@ Patterns:
 
 **Disambiguation from ADD_FEATURE:** User describes broken current state, not missing desired state
 
-**Maps to:** `.windsurf/workflows/fix-bug.md`
 **Policies:** POL-004 → POL-005 → POL-015
+**Windsurf workflow:** `.windsurf/workflows/fix-bug.md`
 
 ---
 
@@ -122,8 +122,8 @@ Patterns:
 - User mentions environment names
 - Conversation follows completed feature or bug fix
 
-**Maps to:** `.windsurf/workflows/deploy.md`
 **Policies:** POL-007 → POL-008 → POL-012 → POL-015
+**Windsurf workflow:** `.windsurf/workflows/deploy.md`
 
 ---
 
@@ -157,8 +157,8 @@ Patterns:
 
 **RULE: Never ask for clarification on incidents. Assume INCIDENT and start triage immediately.**
 
-**Maps to:** `.windsurf/workflows/incident.md`
 **Policies:** POL-010 → POL-008
+**Windsurf workflow:** `.windsurf/workflows/incident.md`
 
 ---
 
@@ -188,8 +188,8 @@ Patterns:
 **Disambiguation from BUG_FIX:** User is asking for evaluation, not reporting something broken
 **Disambiguation from REFACTOR:** User wants assessment, not modification
 
-**Maps to:** `.windsurf/workflows/code-review.md`
 **Policies:** All applicable
+**Windsurf workflow:** `.windsurf/workflows/code-review.md`
 
 ---
 
@@ -220,8 +220,8 @@ Patterns:
 - User asks about data handling or privacy
 - Compliance or regulatory discussion
 
-**Maps to:** `.windsurf/workflows/security-review.md`
 **Policies:** POL-006 → POL-013 → POL-014 → POL-017
+**Windsurf workflow:** `.windsurf/workflows/security-review.md`
 
 ---
 
@@ -254,8 +254,8 @@ Patterns:
 **Disambiguation from ADD_FEATURE:** No new behavior described
 **Disambiguation from BUG_FIX:** Nothing is broken, just messy
 
-**Maps to:** `.windsurf/workflows/refactor.md`
 **Policies:** POL-004 → POL-005 → POL-009
+**Windsurf workflow:** `.windsurf/workflows/refactor.md`
 
 ---
 
@@ -279,7 +279,7 @@ Patterns:
 - `git diff --cached` shows changes
 - User asks to wrap up or finalize
 
-**Maps to:** `.windsurf/workflows/git-staged-summary-global.md`
+**Windsurf workflow:** `.windsurf/workflows/git-staged-summary-global.md`
 
 ---
 
@@ -307,7 +307,7 @@ Patterns:
 - Technology stack discussion changes entirely
 - User expresses frustration with current context
 
-**Maps to:** `.windsurf/workflows/clear-context.md`
+**Windsurf workflow:** `.windsurf/workflows/clear-context.md`
 
 ---
 

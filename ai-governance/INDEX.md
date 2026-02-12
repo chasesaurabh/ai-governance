@@ -84,16 +84,22 @@ The auto-router automatically detects user intent and triggers the appropriate g
 
 | Resource | Purpose |
 |----------|---------|
+| [Shared Governance Rules](./GOVERNANCE-RULES.md) | **Single source of truth** — auto-router, hard rules, self-alignment |
 | [Auto-Router](./router/auto-router.md) | Core routing logic, announcement format, opt-out rules |
 | [Intent Patterns](./router/intent-patterns.md) | Detailed signal patterns for each intent type |
 | [Self-Alignment](./router/self-alignment.md) | Self-align, self-heal, self-learn capabilities |
 
-The router is embedded in every tool adapter:
-- **Windsurf**: `.windsurfrules` (global rules, always active)
-- **Cursor**: `.cursorrules` + `.cursor/rules/governance.md`
-- **Copilot**: `.github/copilot-instructions.md`
-- **Claude Code**: `CLAUDE.md`
-- **Aider**: `.aider/conventions.md`
+### Architecture: Shared Rules + Tool-Specific Adapters
+
+Shared governance rules live in `GOVERNANCE-RULES.md` (above). Each tool adapter references the shared rules and adds only tool-specific behavioral instructions:
+
+| Tool | Adapter File | How It Works |
+|------|-------------|-------------|
+| **Windsurf** | `.windsurfrules` | Cascade uses `read_file` to load shared rules + `.windsurf/workflows/*.md` |
+| **Cursor** | `.cursorrules` + `.cursor/rules/governance.md` | References shared rules, mode-specific guidance (Composer/Chat/Inline) |
+| **Copilot** | `.github/copilot-instructions.md` | Self-contained hard rules (Copilot can't auto-read files) + Chat guidance |
+| **Claude Code** | `CLAUDE.md` | References shared rules, CLI-specific commands and bash integration |
+| **Aider** | `.aider/conventions.md` | Self-contained hard rules + `/add`, `/run`, `/test` command guidance |
 
 ---
 

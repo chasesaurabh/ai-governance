@@ -1,109 +1,105 @@
-# GitHub Copilot Instructions
+# GitHub Copilot Instructions — AI Governance Framework
 
-> Enterprise-grade AI governance framework. All suggestions subject to these policies.
+> These instructions are specific to **GitHub Copilot** (inline completions + Copilot Chat).
+> Full shared governance rules are in `ai-governance/GOVERNANCE-RULES.md`.
 
-## Automatic Workflow Detection (Auto-Router)
+## How Copilot Enforces Governance
 
-**ON EVERY USER PROMPT:** Analyze intent and auto-trigger the matching governance workflow.
+GitHub Copilot works in two modes with different governance capabilities:
 
-| Intent | Signals | Workflow |
-|--------|---------|---------|
-| **Incident** | "outage", "down", "SEV", "production issue" | Triage immediately (POL-010) |
-| **Security** | "security", "vulnerability", "CVE", "injection" | Security review (POL-006) |
-| **Bug Fix** | "fix", "bug", "broken", "not working", "error" | Root cause → test → fix (POL-004/005) |
-| **Deploy** | "deploy", "release", "ship to prod" | Deployment gates (POL-007) |
-| **New Project** | "new project", "from scratch", "scaffold" | Full setup (POL-001→007) |
-| **Add Feature** | "implement", "build", "create [thing]", "add" | TDD workflow (POL-001→006) |
-| **Refactor** | "refactor", "clean up", "simplify", "DRY" | Tests first → measure (POL-004/005) |
-| **Code Review** | "review", "check this", "feedback on" | Structured review (all policies) |
-| **Commit** | "commit message", "summarize changes" | Conventional commits |
-| **Clear Context** | "new task", "fresh start", "switch to" | Summarize → fresh start |
+### Inline Completions (Tab-Complete)
 
-Announce detected workflow: `📋 Detected: [Name] — Following: [policies]`
-If ambiguous: ask ONE question. Incidents: never ask, just triage.
-Details: `ai-governance/router/auto-router.md`
+Copilot's inline suggestions have **no conversation context** — they complete code based on the current file and open tabs.
 
-## Policy Framework
+**What inline completions MUST always do:**
+- Match the existing code style exactly (naming, indentation, patterns)
+- Use parameterized queries — never concatenate strings into SQL
+- Use environment variables for secrets — never hardcode credentials
+- Validate inputs with the project's validation library (zod, joi, etc.)
+- Use structured logging — never `console.log` in production code
+- Complete error handling — include catch blocks, error types, edge cases
+- Use real, verified imports — never suggest packages that don't exist
 
-17 enforceable policies in `ai-governance/policies/POL-001` through `POL-017` covering:
-requirements, architecture, design, coding, testing, security, deployment, observability,
-maintenance, incident response, documentation, change management, data classification,
-LLM risk controls, quality engineering, API versioning, and secrets management.
+**What inline completions MUST never do:**
+- Suggest `eval()`, `exec()`, or `Function()` with any user-provided input
+- Introduce `any` type in TypeScript
+- Generate `TODO` without a ticket reference
+- Leave commented-out code
+- Include real PII or C3/C4 data in examples or test fixtures
+- Hardcode API keys, tokens, passwords, or connection strings
 
-## Mandatory Rules for Code Generation
+### Copilot Chat (Conversational)
 
-### Code Quality (POL-004)
-- Match existing code style and naming conventions
-- Cyclomatic complexity ≤ 15 per function, length ≤ 50 lines guideline
-- No banned patterns: `eval()`, `console.log` in prod, `TODO` without ticket, commented-out code, `any` type
-- All imports MUST exist—verify packages are real before suggesting
-- Use dependency injection, not hard-coded dependencies
+Copilot Chat supports `@workspace` queries and conversational assistance.
+
+**In Copilot Chat, follow the auto-router:**
+
+| Intent | Signals | Governance Action |
+|--------|---------|------------------|
+| **Incident** | "outage", "down", "SEV", "production issue" | Triage immediately — guide through POL-010 steps verbally |
+| **Security** | "security", "vulnerability", "CVE", "injection" | Walk through POL-006 checklist, check for banned patterns |
+| **Bug Fix** | "fix", "bug", "broken", "not working" | Guide: reproduce → root cause → regression test → fix |
+| **Add Feature** | "implement", "build", "create", "add" | Guide: requirements → design → tests first → implement → security review |
+| **Refactor** | "refactor", "clean up", "simplify" | Guide: verify tests exist → make changes → verify tests still pass |
+| **Code Review** | "review", "check this", "feedback on" | Structure feedback by: security, testing, code quality, architecture |
+| **Commit** | "commit message", "summarize changes" | Conventional commits: `type(scope): description` |
+
+**Announce detected intent:** `📋 Detected: [Name] — Following: [policies]`
+
+### Using @workspace for Governance
+
+- `@workspace` can search across the project for context
+- Use it to check for patterns: "Are there any hardcoded secrets in @workspace?"
+- Use it to understand conventions: "What testing framework does @workspace use?"
+- Reference governance files: "Check @workspace ai-governance/policies/POL-006 for security rules"
+
+## Hard Rules (Always Apply)
+
+Since Copilot cannot autonomously read other files, these rules are included directly:
 
 ### Security (POL-006, POL-017)
-- Validate ALL user inputs with schema validation (zod, joi, etc.)
-- Parameterized queries ONLY—never concatenate strings into SQL
-- Encode outputs to prevent XSS
-- Authorization checks on every endpoint—default deny
-- No hardcoded secrets—use env vars or secret manager
-- PII (C3/C4 data) never logged unmasked
-- Security headers on all HTTP responses
+- NEVER hardcode secrets — use env vars or secret manager
+- NEVER concatenate SQL strings — parameterized queries only
+- NEVER log PII unmasked — mask C3/C4 data
+- NEVER use eval()/exec() with user input
+- ALWAYS validate inputs with schema validation
+- ALWAYS set security headers on HTTP responses
+- ALWAYS check authorization on endpoints — default deny
+
+### Code Quality (POL-004)
+- ALWAYS match existing code style
+- Functions ≤ 50 lines, complexity ≤ 15
+- No `console.log` in prod, no `TODO` without ticket, no commented-out code
+- Verify all imports exist before suggesting
 
 ### Testing (POL-005)
-- Write tests alongside code (unit ≥ 80% coverage target)
-- AAA pattern: Arrange, Act, Assert
-- Tests must assert real behavior—no tautologies (`expect(true).toBe(true)`)
-- Test edge cases: null, empty, boundaries, concurrent access, error conditions
-- Use test factories for data, not raw fixtures
+- Write tests alongside code — AAA pattern (Arrange, Act, Assert)
+- No tautology tests — assert real behavior
+- Test edge cases: null, empty, boundaries, error conditions
+- Target ≥ 80% unit coverage
 
-### Data Classification (POL-013)
-- New data model fields MUST have classification annotations (C1-C4)
-- C3/C4 data: encrypted at rest, masked in logs, synthetic in test environments
-- Never include real C3/C4 data in examples or test fixtures
+### Data (POL-013)
+- Annotate new data fields with classification (C1-C4)
+- C3/C4: encrypted at rest, masked in logs, synthetic in tests
 
-### AI-Specific (POL-014)
-- All suggested imports verified to exist in ecosystem
-- API signatures match actual current documentation
-- No hardcoded example values left in production code
-- Error handling must be complete—cover all failure modes
-- New dependencies must be checked: exists, maintained, safe license
+## Copilot-Specific Limitations
 
-### Architecture (POL-002)
-- New services/databases require ADR (`ai-governance/templates/adr-template.md`)
-- API versioning required for all public APIs (POL-016)
-- Breaking changes require new major version + 90-day deprecation
+- **Cannot read files autonomously** — relies on open tabs and @workspace for context
+- **Cannot run terminal commands** — suggest commands for the user to run manually
+- **Cannot execute multi-step workflows** — guide the user through steps conversationally
+- **No memory across sessions** — preferences don't persist; suggest adding to this file
+- **Advisory only** — governance guides completions but cannot block commits; pair with CI gates
 
-## Task Patterns
+## Persistence (Self-Learn)
 
-### New Feature
-1. Requirements with acceptance criteria (POL-001)
-2. Interface-first design with OpenAPI spec (POL-003)
-3. Write failing tests (POL-005)
-4. Implement (POL-004)
-5. Security check (POL-006)
+Copilot reads this file on every interaction. To persist preferences:
+- Suggest the user append a `## Team Preferences` section to this file
+- Include: code style, testing framework, architecture patterns, commit format
+- This file is the only persistence mechanism for Copilot
 
-### Bug Fix
-1. Reproduce → root cause (not symptoms)
-2. Regression test first
-3. Minimal targeted fix
-4. Full test suite passes
+## Quick Reference
 
-## Templates
-- `ai-governance/templates/pr-checklist.md` — PR review gates
-- `ai-governance/templates/adr-template.md` — Architecture decisions
-- `ai-governance/templates/threat-model-lite.md` — Security assessment
-- `ai-governance/templates/ai-usage-disclosure.md` — AI disclosure (required for all PRs)
-
-## Self-Alignment, Self-Healing & Self-Learning
-
-**Self-Align:** Before every response, verify governance compliance: workflow steps followed, security enforced, code matches user's style, no hallucinated imports.
-
-**Self-Heal:** On errors: acknowledge → diagnose root cause → correct → learn → verify. Never repeat same mistake.
-
-**Self-Learn:** Observe user's code style, testing approach, commit format, verbosity. Adapt to match. Persist preferences by suggesting additions to `.github/copilot-instructions.md`.
-
-**Adaptive Governance:** Production=max, prototype=moderate, learning=min. Security floor never drops.
-
-Details: `ai-governance/router/self-alignment.md`
-
-## KPIs
-See `ai-governance/kpis/governance-kpis.md` for measurable targets.
+- **Full shared rules:** `ai-governance/GOVERNANCE-RULES.md`
+- **Policies:** `ai-governance/policies/POL-001` through `POL-017`
+- **Templates:** `ai-governance/templates/`
+- **CI enforcement:** `examples/ci/` (recommended to complement Copilot's advisory role)

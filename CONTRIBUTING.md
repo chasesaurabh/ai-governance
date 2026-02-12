@@ -19,18 +19,19 @@
 ```
 AIGovernance/
 ├── ai-governance/              # Core governance (policies, templates, router)
+│   ├── GOVERNANCE-RULES.md     # ★ SHARED RULES — single source of truth
 │   ├── policies/               # 17 enforceable policies (POL-001 to POL-017)
 │   ├── templates/              # 7 reusable templates
 │   ├── router/                 # Auto-routing engine + self-alignment
 │   ├── kpis/                   # Measurable targets
 │   └── INDEX.md                # Navigation guide
 ├── .windsurf/workflows/        # 10 Windsurf workflows (ADAPTER)
-├── .windsurfrules              # Windsurf auto-router (ADAPTER)
-├── .cursorrules                # Cursor auto-router (ADAPTER)
-├── .cursor/rules/              # Cursor rules (ADAPTER)
-├── .github/                    # GitHub Copilot instructions (ADAPTER)
-├── .aider/                     # Aider conventions (ADAPTER)
-├── CLAUDE.md                   # Claude Code instructions (ADAPTER)
+├── .windsurfrules              # Windsurf adapter — Cascade-specific (ADAPTER)
+├── .cursorrules                # Cursor adapter — Composer/Chat/Inline (ADAPTER)
+├── .cursor/rules/              # Cursor supplementary rules (ADAPTER)
+├── .github/                    # Copilot adapter — inline + Chat (ADAPTER)
+├── .aider/                     # Aider adapter — CLI + git-aware (ADAPTER)
+├── CLAUDE.md                   # Claude Code adapter — CLI + bash (ADAPTER)
 ├── examples/                   # Evaluable workflow demos + CI templates
 │   ├── feature.md              # Feature workflow walkthrough
 │   ├── bugfix.md               # Bug fix workflow walkthrough
@@ -44,6 +45,13 @@ AIGovernance/
 ├── CHANGELOG.md                # Version history and change log
 └── README.md
 ```
+
+### Adapter Architecture
+
+Each tool adapter references `ai-governance/GOVERNANCE-RULES.md` (the single source of truth for auto-router, hard rules, and self-alignment) and adds only tool-specific behavioral instructions. This eliminates duplication while keeping instructions realistic for each tool's actual capabilities.
+
+- **Agentic tools** (Windsurf, Cursor, Claude Code): lean adapters that instruct the AI to read the shared file
+- **Limited tools** (Copilot, Aider): include essential hard rules inline since the tool can't auto-read other files
 
 ## Governance File Guidelines
 

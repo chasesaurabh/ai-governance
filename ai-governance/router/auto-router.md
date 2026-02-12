@@ -135,7 +135,9 @@ Rules for ambiguity:
 
 Once a workflow is detected:
 
-1. **Read the full workflow file** from `.windsurf/workflows/[workflow].md`
+1. **Read the relevant policy files** from `ai-governance/policies/` for the detected intent
+   - Windsurf: also read the workflow file from `.windsurf/workflows/[workflow].md`
+   - Other tools: follow the task routing steps from `ai-governance/GOVERNANCE-RULES.md`
 2. **Follow the steps in order** — don't skip governance gates
 3. **Use the PR checklist** from `ai-governance/templates/pr-checklist.md` before finalizing
 4. **Apply AI disclosure** per POL-014 for any AI-generated output

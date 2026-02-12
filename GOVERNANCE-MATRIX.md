@@ -64,16 +64,16 @@ The auto-router eliminates the need for users to manually select workflows. It a
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| Router logic | `ai-governance/router/auto-router.md` | Core routing rules, announcement format, opt-out |
+| **Shared rules** | `ai-governance/GOVERNANCE-RULES.md` | **Single source of truth** — auto-router table, hard rules, self-alignment |
+| Router logic | `ai-governance/router/auto-router.md` | Detailed routing rules, announcement format, opt-out |
 | Intent patterns | `ai-governance/router/intent-patterns.md` | Keyword/context patterns for 10 intent types |
-| Windsurf rules | `.windsurfrules` | Always-active global rules with routing |
-| Cursor rules | `.cursorrules` | Always-active global rules with routing |
 
 **How it works:**
 1. User types a natural language prompt
-2. AI analyzes intent against signal patterns (keywords, context, file references)
-3. AI announces the detected workflow: `📋 Detected: [Name] — Following: [policies]`
-4. AI follows the workflow steps from `.windsurf/workflows/[workflow].md`
+2. AI loads shared rules from `ai-governance/GOVERNANCE-RULES.md` (if not already loaded)
+3. AI analyzes intent against signal patterns (keywords, context, file references)
+4. AI announces the detected workflow: `📋 Detected: [Name] — Following: [policies]`
+5. AI reads and follows the relevant policy files or workflow steps
 
 **Priority order:** Incident > Security > Bug Fix > Deploy > New Project > Add Feature > Refactor > Code Review > Commit > Clear Context
 
@@ -81,19 +81,17 @@ The auto-router eliminates the need for users to manually select workflows. It a
 
 ---
 
-## Tool Adapter Locations
+## Tool Adapter Architecture: Shared Rules + Tool-Specific
 
-Each AI tool reads instructions from a specific file/directory:
+Each adapter file references the shared `ai-governance/GOVERNANCE-RULES.md` and adds only tool-specific behavioral instructions. This eliminates duplication while making instructions realistic for each tool's actual capabilities.
 
-| Tool | Auto-Router File | Workflow/Rules File | Format | Auto-loaded? |
-|------|-----------------|-------------------|--------|-------------|
-| **Windsurf** (Cascade) | `.windsurfrules` | `.windsurf/workflows/*.md` | Markdown | Yes, both always active |
-| **Cursor** | `.cursorrules` | `.cursor/rules/*.md` | Markdown | Yes, both always active |
-| **GitHub Copilot** | `.github/copilot-instructions.md` | (same file) | Markdown | Yes, always active |
-| **Claude Code** | `CLAUDE.md` | (same file) | Markdown | Yes, always active |
-| **Aider** | `.aider/conventions.md` | (same file) | Markdown | Yes, always active |
-| **VS Code** (generic) | `.vscode/settings.json` | (settings) | JSON | Yes, workspace settings |
-| **JetBrains** | `.idea/` AI config | Varies | Depends on plugin |
+| Tool | Adapter File | Reads Shared Rules? | Workflow System | Key Capabilities |
+|------|-------------|-------------------|-----------------|-----------------|
+| **Windsurf** (Cascade) | `.windsurfrules` | Yes, via `read_file` tool | `.windsurf/workflows/*.md` | File editing, terminal, browser preview, memories |
+| **Cursor** | `.cursorrules` + `.cursor/rules/governance.md` | Yes, via file reading | Policy-based (no workflow files) | Composer, Chat, inline edit, `@` mentions |
+| **Claude Code** | `CLAUDE.md` | Yes, via Read tool / cat | Policy-based (no workflow files) | File I/O, bash commands, CLAUDE.md tree |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | No (hard rules inline) | Conversational guidance | Inline completions, Copilot Chat, `@workspace` |
+| **Aider** | `.aider/conventions.md` | No (hard rules inline, `/add` for full rules) | `/add` to load policies | Git-aware auto-commit, `/run`, `/test`, `/architect` |
 
 ---
 
@@ -196,20 +194,22 @@ Layer 6: Runtime Controls        → WAF, secret manager, monitoring, alerting
 
 ## Quick Setup Per Tool
 
+All tools require the core: `ai-governance/` directory (includes `GOVERNANCE-RULES.md`, policies, templates, router).
+
 ### Windsurf
-Copy `.windsurf/workflows/` to project. Workflows reference governance policies via relative paths.
+Copy `.windsurfrules` + `.windsurf/workflows/` to project. Cascade auto-loads rules and uses `read_file` to load shared governance rules and workflow files on demand.
 
 ### Cursor
-Copy `.cursor/rules/governance.md` to project. Rules auto-loaded on every interaction.
+Copy `.cursorrules` + `.cursor/rules/governance.md` to project. Rules auto-loaded on every interaction. Cursor reads shared governance rules via file reading capabilities.
 
 ### GitHub Copilot
-Copy `.github/copilot-instructions.md` to project. Instructions auto-loaded in VS Code with Copilot.
+Copy `.github/copilot-instructions.md` to project. Auto-loaded in VS Code with Copilot. Hard rules are inline since Copilot cannot autonomously read other files.
 
 ### Claude Code
-Copy `CLAUDE.md` to project root. Auto-loaded by Claude Code.
+Copy `CLAUDE.md` to project root. Auto-loaded by Claude Code. Reads shared governance rules via Read tool on session start.
 
 ### Aider
-Copy `.aider/conventions.md` to project. Auto-loaded by Aider.
+Copy `.aider/conventions.md` to project. Auto-loaded by Aider. Hard rules inline; users can `/add ai-governance/GOVERNANCE-RULES.md` for full rules.
 
 ### CI/CD (Any Tool)
-Reference `ai-governance/policies/` in CI configuration. Implement enforcement gates per the matrix above.
+Reference `ai-governance/policies/` in CI configuration. Implement enforcement gates per the matrix above. See `examples/ci/` for ready-to-use templates.

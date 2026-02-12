@@ -116,11 +116,11 @@ The AI observes user patterns and preferences to provide increasingly personaliz
 
 | Tool | Persistence Mechanism | How to Store |
 |------|----------------------|-------------|
-| **Windsurf** | Cascade Memories | Use memory tool to save user preferences |
-| **Cursor** | `.cursor/rules/` files | Suggest adding a user-preferences rule file |
-| **Claude Code** | `CLAUDE.md` additions | Suggest appending preferences section |
-| **Copilot** | `.github/copilot-instructions.md` | Suggest appending preferences |
-| **Aider** | `.aider/conventions.md` | Suggest appending preferences |
+| **Windsurf** | Cascade Memories (`create_memory` tool) | Use memory tool to save user preferences — persists across sessions automatically |
+| **Cursor** | `.cursor/rules/` files | Suggest creating `.cursor/rules/user-preferences.md` — auto-loaded on every interaction |
+| **Claude Code** | `CLAUDE.md` additions | Suggest appending `## User Preferences` section — read on session start |
+| **Copilot** | `.github/copilot-instructions.md` | Suggest appending `## Team Preferences` section — only persistence mechanism available |
+| **Aider** | `.aider/conventions.md` | Suggest appending `## Team Preferences` section — read on session start |
 
 **What to persist (with user permission):**
 

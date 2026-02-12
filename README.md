@@ -42,17 +42,21 @@ The framework includes an **auto-router** that reads your prompt, detects what y
 
 ## Supported Tools
 
-| Tool | Auto-loads? |
-|------|------------|
-| **Windsurf** (Cascade) | Yes — 10 workflows + auto-router |
-| **Cursor** | Yes — rules + auto-router |
-| **GitHub Copilot** | Yes |
-| **Claude Code** | Yes |
-| **Aider** | Yes |
+Each tool gets instructions tailored to how it actually works — not copy-pasted generic prompts.
+
+| Tool | Adapter | How Governance Works |
+|------|---------|---------------------|
+| **Windsurf** (Cascade) | `.windsurfrules` | Loads shared rules via `read_file`, executes `.windsurf/workflows/`, uses Cascade Memories |
+| **Cursor** | `.cursorrules` | Loads shared rules, mode-specific guidance (Composer / Chat / Inline) |
+| **Claude Code** | `CLAUDE.md` | Loads shared rules via Read tool, CLI commands, bash verification |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | Self-contained rules (can't auto-read files), Copilot Chat + `@workspace` |
+| **Aider** | `.aider/conventions.md` | Self-contained rules, `/add` to load policies, git-aware auto-commit |
 
 ## What's Included
 
 - **17 policies** — requirements, architecture, testing, security, deployment, incident response, secrets, and more
+- **Shared governance rules** — single source of truth referenced by all tool adapters (no duplication)
+- **Tool-specific adapters** — each adapter is tailored to the tool's real capabilities
 - **7 templates** — PR checklist, definition of done, ADR, threat model, AI usage disclosure
 - **Auto-router** — detects intent, triggers the right workflow, zero config
 - **KPIs** — measurable targets for every policy area

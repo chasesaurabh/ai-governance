@@ -1,105 +1,70 @@
-# Cursor Rules - Enterprise AI Governance
+# Cursor Governance — Mode-Specific Guide
 
-> 17 enforceable policies in `ai-governance/policies/`. All AI output subject to these rules.
+> This file supplements `.cursorrules`. Shared rules are in `ai-governance/GOVERNANCE-RULES.md`.
+> Do NOT duplicate rules from that file here — read it instead.
 
-## Automatic Workflow Detection (Auto-Router)
+## Governance by Cursor Mode
 
-**ON EVERY USER PROMPT:** Analyze intent and auto-trigger the matching governance workflow.
+Each Cursor mode has different capabilities. Use governance appropriately for each:
 
-| Intent | Signals | Policies |
-|--------|---------|----------|
-| **Incident** | "outage", "down", "SEV", "production issue" | POL-010 → POL-008 |
-| **Security** | "security", "vulnerability", "CVE", "injection" | POL-006 → POL-013 → POL-017 |
-| **Bug Fix** | "fix", "bug", "broken", "not working", "error" | POL-004 → POL-005 → POL-015 |
-| **Deploy** | "deploy", "release", "ship to prod" | POL-007 → POL-008 → POL-012 |
-| **New Project** | "new project", "from scratch", "scaffold" | POL-001 → POL-002 → POL-004 → POL-007 |
-| **Add Feature** | "implement", "build", "create [thing]" | POL-001 → POL-003 → POL-005 → POL-004 → POL-006 |
-| **Refactor** | "refactor", "clean up", "simplify", "DRY" | POL-004 → POL-005 → POL-009 |
-| **Code Review** | "review", "check this", "feedback on" | All applicable |
-| **Commit** | "commit message", "summarize changes" | Conventional commits |
-| **Clear Context** | "new task", "fresh start", "switch to" | Summarize → fresh start |
+### Composer Mode (Agentic / Multi-File)
 
-**Announce:** `📋 Detected: [Name] — Following: [policies]` then execute workflow steps.
-**Ambiguous:** Ask ONE question with top 2 options.
-**Incidents:** Never ask — triage immediately.
-**Opt-out:** Respect "skip governance" but always enforce POL-006 + POL-017.
+Composer can read files, edit files, run terminal commands, and make multi-step changes.
 
-Details: `ai-governance/router/auto-router.md` and `ai-governance/router/intent-patterns.md`
+**Governance approach in Composer:**
+1. Read `ai-governance/GOVERNANCE-RULES.md` at the start if not already loaded
+2. When auto-router detects intent, read the relevant policy files from `ai-governance/policies/`
+3. Follow the task routing steps (Requirements → Design → Tests → Implement → Security)
+4. Run linter and tests via terminal after code changes
+5. Use `ai-governance/templates/pr-checklist.md` before declaring work complete
 
-## Hard Rules (Never Violate)
+**Example Composer workflow for "add feature":**
+```
+1. Read POL-001 → verify requirements and acceptance criteria
+2. Read POL-003 → design interface first
+3. Read POL-005 → write failing tests
+4. Implement code following POL-004 standards
+5. Run: npm test (verify tests pass)
+6. Run: npm run lint (verify code quality)
+7. Read POL-006 → security checklist
+8. Output: AI disclosure from templates/ai-usage-disclosure.md
+```
 
-### Security (POL-006, POL-017)
-- NEVER hardcode secrets, credentials, API keys, or tokens
-- NEVER use string concatenation in SQL—parameterized queries only
-- NEVER log PII (C3/C4 data) unmasked—use `j***@example.com` format
-- NEVER use `eval()`, `exec()`, or `Function()` with user input
-- NEVER skip input validation—use schema validation (zod, joi, etc.)
-- NEVER skip authorization checks—default deny on all endpoints
-- ALWAYS set security headers (HSTS, CSP, X-Frame-Options, etc.)
+### Chat Mode (Conversation)
 
-### Code Quality (POL-004)
-- NEVER leave `console.log`/`print()` in production code—use structured logger
-- NEVER leave `TODO` without a ticket reference
-- NEVER leave commented-out code—use git history
-- NEVER introduce `any` type in TypeScript
-- NEVER suggest packages that don't exist—verify first
-- ALWAYS match existing code style
-- ALWAYS keep functions ≤ 50 lines, complexity ≤ 15
-- ALWAYS use dependency injection over hard-coded deps
+Chat is for discussion only — it cannot edit files or run commands directly.
 
-### Testing (POL-005)
-- ALWAYS write tests alongside implementation
-- ALWAYS use AAA: Arrange, Act, Assert
-- NEVER write tautology tests (`expect(true).toBe(true)`)
-- ALWAYS test error/edge cases, not just happy path
-- ALWAYS use factories for test data, not raw fixtures
-- Target ≥ 80% unit coverage
+**Governance approach in Chat:**
+- Use Chat for: code review, security review, architecture decisions, incident triage
+- Reference specific files with `@file` for focused discussion
+- Reference directories with `@folder` for broader context
+- Use `@codebase` for project-wide questions
+- When reviewing code, structure feedback by policy area (security, testing, quality)
+- For incident triage: ask for logs, metrics, recent changes — guide through POL-010 verbally
 
-### Data (POL-013)
-- ALWAYS annotate new data fields with classification (C1-C4)
-- NEVER include real C3/C4 data in tests—use synthetic data
-- NEVER send C3/C4 data to AI tools
+### Inline Edit (Cmd+K / Ctrl+K)
 
-### AI Output (POL-014)
-- ALWAYS verify imports exist before suggesting
-- ALWAYS verify API signatures against real docs
-- ALWAYS remove hardcoded example values from prod code
-- ALWAYS complete error handling—don't skip edge cases
+Inline edit is single-location, quick edits with minimal context.
 
-## Task Routing
+**Governance approach in Inline:**
+- Hard security rules still apply (no hardcoded secrets, parameterized queries)
+- Match surrounding code style exactly
+- Keep edits minimal and focused
+- Not suitable for multi-step governance workflows
 
-| Task | Primary Policies |
-|------|-----------------|
-| New feature | POL-001 → POL-003 → POL-005 → POL-004 → POL-006 |
-| Bug fix | POL-004 → POL-005 (regression test first) |
-| New project | POL-001 → POL-002 → POL-004 → POL-007 |
-| Architecture decision | POL-002 (ADR required) → POL-016 (API versioning) |
-| Deployment | POL-007 → POL-008 → POL-012 |
-| Incident | POL-010 → POL-008 |
-| Security review | POL-006 → POL-013 → POL-017 |
-| Dependency update | POL-009 → POL-004 CTRL-004.3 |
+## Cursor-Specific Patterns
 
-## Templates
+### File References in Chat
+- `@ai-governance/GOVERNANCE-RULES.md` — load shared rules
+- `@ai-governance/policies/POL-006-security-privacy.md` — load specific policy
+- `@ai-governance/templates/pr-checklist.md` — load PR checklist
 
-- `ai-governance/templates/pr-checklist.md` — PR gates
-- `ai-governance/templates/adr-template.md` — Architecture decisions
-- `ai-governance/templates/threat-model-lite.md` — Security assessment
-- `ai-governance/templates/ai-usage-disclosure.md` — AI disclosure (required)
-- `ai-governance/templates/definition-of-ready.md` — Sprint entry
-- `ai-governance/templates/definition-of-done.md` — Completion criteria
-- `ai-governance/templates/risk-acceptance.md` — Policy exceptions
+### Notecards / Rules Persistence
+- User preferences learned during sessions should be suggested as `.cursor/rules/` files
+- Example: `.cursor/rules/code-style.md` for team conventions
+- Rules files are auto-loaded, so preferences persist across sessions
 
-## Self-Alignment, Self-Healing & Self-Learning
-
-**Self-Align:** Before every response, verify governance compliance: workflow followed, security enforced, code matches user's style, no hallucinated imports/APIs.
-
-**Self-Heal:** On errors: acknowledge → diagnose root cause → correct → learn → verify. Never repeat same mistake.
-
-**Self-Learn:** Observe user's code style, architecture, testing, commit format, verbosity. Adapt to match. Persist by suggesting additions to `.cursor/rules/` files.
-
-**Adaptive Governance:** Production=max, prototype=moderate, learning=min. Security floor never drops.
-
-Details: `ai-governance/router/self-alignment.md`
-
-## KPIs
-See `ai-governance/kpis/governance-kpis.md` for targets.
+### Limitations to Be Honest About
+- Cursor cannot run CI pipelines — recommend `examples/ci/` templates for enforcement
+- Cursor's governance is advisory — it guides but doesn't block merges
+- For true enforcement, pair with CI gates and branch protection
