@@ -9,7 +9,7 @@ Local governance checks and verification for AI-assisted development. The framew
 Requires Node.js 22+ and Git. In your project:
 
 ```bash
-npx ai-governance-setup@3.0.0 --tools copilot,claude,cursor,devin --save-dev .
+npx ai-governance-setup@2.0.1 --tools copilot,claude,cursor,devin --save-dev .
 npx ai-governance check
 ```
 
