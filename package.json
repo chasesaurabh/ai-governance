@@ -21,7 +21,9 @@
     "lib/",
     "examples/ci/",
     "install.sh",
-    "docs/"
+    "docs/",
+    "AGENTS.md",
+    ".github/instructions/"
   ],
   "keywords": [
     "ai",
