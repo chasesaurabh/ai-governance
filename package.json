@@ -4,7 +4,8 @@
   "description": "One-command setup for AI Governance Framework — enforceable policies for AI coding assistants",
   "type": "module",
   "bin": {
-    "ai-governance-setup": "bin/cli.js"
+    "ai-governance-setup": "bin/cli.js",
+    "ai-governance": "bin/governance.js"
   },
   "files": [
     "bin/",
