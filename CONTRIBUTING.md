@@ -21,7 +21,7 @@ Run `npm ci`, then `npm run check` and `npm run test:package`. The first runs re
 
 Add behavioral tests for routing changes, unsafe input, upgrades, missing evidence and exception handling. Add held-out model evaluations before asserting low-reasoning reliability. Include negative prompts and scoped risk paths.
 
-CI defines Windows/Linux and Node 22/24 runs. A local pass does not establish remote CI status. Line-ending attributes preserve portable scripts.
+CI defines Windows/Linux and Node 22.13, latest 22/24 and 26 runs. A local pass does not establish remote CI status. Line-ending attributes preserve portable scripts.
 
 ## Extending controls
 

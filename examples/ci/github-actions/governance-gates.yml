@@ -29,11 +29,11 @@ jobs:
     name: "POL-004: Lint & Format"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7.0.0
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "npm"
 
       - run: npm ci
@@ -51,11 +51,11 @@ jobs:
     name: "POL-005: Test & Coverage"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7.0.0
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "npm"
 
       - run: npm ci
@@ -77,40 +77,30 @@ jobs:
       security-events: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
 
       # Option 1: CodeQL (free for public repos, included with GitHub Advanced Security)
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4.38.0
         with:
-          languages: javascript  # Adjust: python, java, csharp, go, ruby, etc.
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
+          languages: javascript  # Adjust for your stack. Compiled languages need an appropriate build-mode.
+          build-mode: none
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4.38.0
 
-      # Option 2: Semgrep (free, supports custom rules)
-      # Uncomment below and comment out CodeQL if preferred
-      # - name: Semgrep SAST
-      #   uses: returntocorp/semgrep-action@v1
-      #   with:
-      #     config: >-
-      #       p/default
-      #       p/owasp-top-ten
-      #       p/javascript
+      # Alternative SAST configuration: https://docs.semgrep.dev/semgrep-ci/sample-ci-configs
 
   # ── POL-006: Dependency Audit ─────────────────────────────────────────────
   dependency-audit:
     name: "POL-006: Dependency Audit"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7.0.0
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "npm"
 
       - run: npm ci
@@ -124,13 +114,13 @@ jobs:
     name: "POL-017: Secret Scanning"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0  # Full history for scanning
 
       # Gitleaks — detects hardcoded secrets in git history
       - name: Gitleaks scan
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -140,7 +130,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
 
       # Check if PR body contains AI disclosure section
       # Customize the pattern to match your team's disclosure format
