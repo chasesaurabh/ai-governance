@@ -14,7 +14,7 @@ async function main() {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     if (arg === '--help' || arg === '-h') {
-      console.log('Usage: ai-governance-setup [install|doctor|uninstall] [directory] [--all | --tools windsurf,cursor | --core-only] [--dry-run] [--save-dev]');
+      console.log('Usage: ai-governance-setup [install|doctor|uninstall] [directory] [--all | --tools devin,cursor | --core-only] [--dry-run] [--save-dev]');
       return;
     }
     if (['doctor', 'install', 'uninstall'].includes(arg)) command = arg;

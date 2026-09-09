@@ -148,7 +148,7 @@ jobs:
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          if echo "$PR_BODY" | grep -qi "ai.assist\|ai.usage\|ai.disclosure\|copilot\|cursor\|windsurf\|claude\|chatgpt"; then
+          if echo "$PR_BODY" | grep -qi "ai.assist\|ai.usage\|ai.disclosure\|copilot\|cursor\|devin\|claude\|chatgpt"; then
             echo "✓ AI usage disclosure detected in PR description"
           else
             echo "::notice::No AI disclosure detected. If AI tools were used, please add a disclosure per POL-014."

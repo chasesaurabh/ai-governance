@@ -6,9 +6,9 @@
 
 | Field | Value |
 |-------|-------|
-| **AI Tool(s) Used** | [ ] None / [ ] Windsurf (Cascade) / [ ] GitHub Copilot / [ ] Claude Code / [ ] Cursor / [ ] Aider / [ ] ChatGPT / [ ] Other: ____ |
+| **AI Tool(s) Used** | [ ] None / [ ] Devin / [ ] GitHub Copilot / [ ] Claude Code / [ ] Cursor / [ ] Aider / [ ] ChatGPT / [ ] Other: ____ |
 | **Usage Level** | [ ] None / [ ] Assisted (suggestions/completions) / [ ] Generated (AI authored majority) |
-| **Model Version** | _If known (e.g., GPT-4o, Claude 3.5 Sonnet, etc.)_ |
+| **Model Version / Routing** | _Exact model ID/version shown by the host; record routing mode if automatic, or unknown if not exposed_ |
 
 ## Scope of AI Involvement
 

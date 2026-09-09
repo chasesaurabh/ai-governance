@@ -1,6 +1,6 @@
 {
   "name": "ai-governance-setup",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "One-command setup for AI Governance Framework — enforceable policies for AI coding assistants",
   "type": "module",
   "bin": {
@@ -10,8 +10,6 @@
   "files": [
     "bin/",
     "ai-governance/",
-    ".windsurf/",
-    ".windsurfrules",
     ".cursor/",
     ".cursorrules",
     ".github/copilot-instructions.md",
@@ -29,7 +27,7 @@
     "ai",
     "governance",
     "coding-assistant",
-    "windsurf",
+    "devin",
     "cursor",
     "copilot",
     "claude",

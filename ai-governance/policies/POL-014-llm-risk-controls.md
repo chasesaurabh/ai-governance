@@ -16,7 +16,7 @@ Mitigate risks unique to AI-assisted software development: hallucinated code, pr
 
 ## Scope
 
-Applies to: all use of AI coding assistants (Windsurf/Cascade, GitHub Copilot, Claude Code, Cursor, Aider, ChatGPT, and any future tools) for code generation, review, debugging, documentation, and architecture.
+Applies to: all use of AI coding assistants (Devin, GitHub Copilot, Claude Code, Cursor, Aider, ChatGPT, and any future tools) for code generation, review, debugging, documentation, and architecture.
 
 ---
 
@@ -107,10 +107,12 @@ When AI tools have access to execute commands, read files, or make API calls:
 | Tool | Data Handling | Control |
 |------|--------------|---------|
 | GitHub Copilot | Code sent to GitHub servers | Enterprise tier with data retention opt-out |
-| Windsurf/Cascade | Code processed by Codeium | Enterprise tier, review data policy |
-| Claude Code | Code sent to Anthropic | Review data retention policy |
-| Cursor | Code sent to cursor servers | Enterprise tier, review data policy |
-| Self-hosted models | Data stays internal | Preferred for C3/C4 codebases |
+| Devin | Cognition and configured model providers; local/cloud execution depends on surface | Review Data Controls, provider retention and enterprise contract |
+| Claude Code | Requests go through the configured Anthropic or third-party deployment | Review account terms, training settings, retention and gateway configuration |
+| Cursor | Cursor and model/inference providers; Cloud Agents also access repositories | Enforce Privacy Mode and review model-specific retention approvals and cloud access |
+| Self-hosted models | Depends on deployment, logging, integrations and network egress | Verify isolation before approving C3/C4 workloads |
+
+Current host/model sources and review date: [tool reference](https://github.com/chasesaurabh/ai-governance/blob/main/docs/TOOLS-AND-MODELS.md).
 
 **Enforcement**: AI prompt proxy for network-based tools. Developer training. Quarterly access audit.
 

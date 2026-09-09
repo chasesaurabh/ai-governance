@@ -9,7 +9,7 @@ Local governance checks and verification for AI-assisted development. The framew
 Requires Node.js 22+ and Git. In your project:
 
 ```bash
-npx ai-governance-setup@2.0.0 --tools copilot,claude,cursor,devin --save-dev .
+npx ai-governance-setup@3.0.0 --tools copilot,claude,cursor,devin --save-dev .
 npx ai-governance check
 ```
 
@@ -95,7 +95,6 @@ The validator checks structure and declared results; it does not authenticate re
 |---|---|---|
 | Claude Code | `CLAUDE.md` | Project instructions direct the assistant to the shared runtime |
 | Cursor | `.cursor/rules/governance.mdc` | Project rule with frontmatter; `.cursorrules` retained as a compatibility pointer |
-| Windsurf | `.windsurfrules` plus `.windsurf/workflows/` | Shared runtime and workflow files |
 | GitHub Copilot | `.github/copilot-instructions.md` | Repository instructions; capabilities vary by host/mode |
 | Devin | `AGENTS.md` | Repository instructions; verify loading in a real session |
 | Aider | `.aider/conventions.md` | Attach conventions/shared instructions through the tool's context mechanism |
@@ -120,3 +119,5 @@ Checks cover routing, controls, evidence, installation and generated drift. Pack
 `npm run evaluate` reports rule accuracy and approximate instruction sizes. [The evaluation protocol](eval/README.md) explains independently reviewed comparisons across models and reasoning settings. No provider benchmarks or token-billing savings are claimed from these static checks.
 
 [Contributing](CONTRIBUTING.md) · [Policy index](ai-governance/INDEX.md) · [Changelog](CHANGELOG.md)
+
+See [current tools and model selection](docs/TOOLS-AND-MODELS.md) for the dated provider reference.

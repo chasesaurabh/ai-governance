@@ -68,3 +68,19 @@ test('uninstall previews and preserves edits and surrounding user instructions',
   assert.equal(existsSync(join(target, 'examples/ci/check.cjs')), false);
   assert.ok(existsSync(join(target, '.ai-governance-install.json')));
 });
+
+test('current adapters install alongside preserved files from an older manifest', t => {
+  const { source, target } = fixture(t);
+  writeFileSync(join(source, 'AGENTS.md'), 'Devin instructions');
+  applyInstall(planInstall(source, target, ['claude']));
+  const statePath = join(target, '.ai-governance-install.json');
+  const state = JSON.parse(readFileSync(statePath, 'utf8'));
+  state.tools.push('removed-adapter');
+  writeFileSync(statePath, JSON.stringify(state));
+  const plan = planInstall(source, target, ['devin']);
+  assert.deepEqual(plan.manifest.tools, ['claude', 'devin']);
+  applyInstall(plan);
+  assert.match(readFileSync(join(target, 'AGENTS.md'), 'utf8'), /Devin instructions/);
+  assert.ok(doctor(target).every(item => item.status === 'ok'));
+  assert.throws(() => planInstall(source, target, ['removed-adapter']), /Unknown tool/);
+});
