@@ -1,0 +1,21 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fixture } from '../test-support/fixtures.js';
+import { configureHooks, hookResponse } from '../lib/integrations.js';
+test('native hooks preserve other settings and remove only owned entries', t => {
+  const root = fixture(t);
+  mkdirSync(join(root, 'node_modules/ai-governance-setup/bin'), { recursive: true }); writeFileSync(join(root, 'node_modules/ai-governance-setup/bin/hook.js'), '');
+  mkdirSync(join(root, '.claude')); const path = join(root, '.claude/settings.json');
+  const original = { permissions: { deny: ['Bash(rm *)'] }, hooks: { UserPromptSubmit: [{ hooks: [{ type: 'command', command: 'user-hook' }] }] } };
+  writeFileSync(path, JSON.stringify(original));
+  configureHooks(root, ['claude', 'cursor'], { preview: true });
+  assert.deepEqual(JSON.parse(readFileSync(path)), original);
+  configureHooks(root, ['claude', 'cursor']); configureHooks(root, ['claude']);
+  assert.equal(JSON.parse(readFileSync(path)).hooks.UserPromptSubmit.length, 2);
+  configureHooks(root, ['claude', 'cursor'], { remove: true });
+  assert.deepEqual(JSON.parse(readFileSync(path)), original);
+  assert.ok(hookResponse('claude', root).hookSpecificOutput.additionalContext);
+  assert.ok(hookResponse('cursor', root).additional_context);
+});

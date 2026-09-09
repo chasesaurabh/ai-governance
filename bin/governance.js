@@ -4,10 +4,15 @@ import { loadConfig, validateCatalog } from '../lib/config.js';
 import { readFileSync } from 'node:fs';
 import { createPacket, renderPacket } from '../lib/packet.js';
 import { createEvidence, checkEvidence, renderChecklist } from '../lib/evidence.js';
+import { runDaily } from '../lib/daily-cli.js';
 
 try {
   const [command, ...args] = process.argv.slice(2);
-  if (command === 'check-config') {
+  if (await runDaily(command, args)) {
+    // Dedicated daily-work command handled above.
+  } else if (command === '--help' || !command) {
+    console.log('Commands: init, inspect, check, explain, trust, run, summary, hooks, pack-lock, baseline, pilot-start, pilot-stop, pilot-feedback, pilot-help, pilot-report, check-config, packet, checklist, evidence-init, evidence-check. Daily commands accept --project path. Use init --project path --dry-run to preview onboarding.');
+  } else if (command === 'check-config') {
     if (args.length > 1) throw new Error('check-config accepts one directory');
     validateCatalog();
     console.log(JSON.stringify(loadConfig(resolve(args[0] ?? '.')), null, 2));

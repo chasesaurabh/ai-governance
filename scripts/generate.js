@@ -11,6 +11,8 @@ const adapter = name => `${banner}# ${name} governance\n\nRead ai-governance/GOV
 const outputs = {
   'ai-governance/GOVERNANCE-RULES.md': bootstrap,
   'CLAUDE.md': adapter('Claude Code'),
+  'AGENTS.md': `${adapter('Devin and compatible agents')}\nFor daily work run the installed ai-governance check command against the requested diff. Before executing configured checks, require explicit repository trust. Use summary for observed verification. Do not publish, deploy, or contact people without user authorization.\n`,
+  '.github/instructions/governance-security.instructions.md': `---\napplyTo: "**/auth/**,**/security/**,**/migrations/**,.github/workflows/**"\n---\n${banner}Inspect trust boundaries and relevant authorization, migration or CI risks. Use ai-governance check to identify applicable review items. Missing checks are not passing evidence.\n`,
   '.windsurfrules': adapter('Windsurf'),
   '.cursorrules': `${banner}# Legacy Cursor entry point\n\nUse .cursor/rules/governance.mdc. If that rule is unavailable, read ai-governance/GOVERNANCE-RULES.md once per task.\n`,
   '.cursor/rules/governance.mdc': `---\ndescription: Compact governance entry point\nalwaysApply: true\n---\n${adapter('Cursor')}`,

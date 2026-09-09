@@ -28,6 +28,30 @@ try {
   try { run(process.execPath, [join(installed, 'bin/governance.js'), 'evidence-check', '--input', join(root, 'evidence.json'), '--task', task, '--project', target]); }
   catch (error) { if (error.status === 1 && JSON.parse(error.stdout).ready === false) rejected = true; else throw error; }
   if (!rejected) throw new Error('Unverified evidence was accepted');
+  // Exercise the daily workflow from the actual package, not source imports.
+  run('git', ['init'], consumer);
+  writeFileSync(join(consumer, '.gitignore'), 'node_modules/\n');
+  writeFileSync(join(consumer, 'governance.config.json'), JSON.stringify({ commands: { test: 'node -e "process.exit(0)"' }, mode: 'enforce', requiredChecks: ['test'] }));
+  const cli = join(installed, 'bin/governance.js');
+  run(process.execPath, [cli, 'inspect', '--project', consumer, '--json']);
+  run(process.execPath, [cli, 'init', '--project', consumer, '--tools', 'claude,cursor,copilot,devin', '--dry-run', '--json']);
+  run(process.execPath, [cli, 'hooks', '--project', consumer, '--tools', 'claude,cursor']);
+  run(process.execPath, [cli, 'hooks', '--project', consumer, '--tools', 'claude,cursor', '--remove']);
+  let blocked = false;
+  try { run(process.execPath, [cli, 'check', '--project', consumer, '--staged', '--json']); }
+  catch (error) { if (error.status === 1 && JSON.parse(error.stdout).blocking) blocked = true; else throw error; }
+  if (!blocked) throw new Error('Missing required verification did not block');
+  run(process.execPath, [cli, 'trust', '--project', consumer, '--accept']);
+  const observed = JSON.parse(run(process.execPath, [cli, 'run', '--project', consumer, '--checks', 'test']));
+  if (!observed.complete) throw new Error('Packaged verification failed');
+  const summary = JSON.parse(run(process.execPath, [cli, 'summary', '--project', consumer, '--json']));
+  if (summary[0].status !== 'passed') throw new Error('Packaged summary failed');
+  run(process.execPath, [cli, 'check', '--project', consumer, '--staged', '--json']);
+  run(process.execPath, [cli, 'pilot-start', '--project', consumer, '--tool', 'devin']);
+  run(process.execPath, [cli, 'pilot-feedback', '--project', consumer, '--rule', 'TEST-001', '--rating', 'useful']);
+  const pilot = JSON.parse(run(process.execPath, [cli, 'pilot-report', '--project', consumer]));
+  if (pilot.usefulFindings !== 1) throw new Error('Packaged pilot failed');
+  run(process.execPath, [join(installed, 'bin/cli.js'), 'uninstall', target]);
   console.log(`Package smoke passed: ${packed.files.length} packaged files; all adapters, doctor, packet and evidence commands verified.`);
 } finally {
   // Delete only the directory allocated above, and never a computed workspace ancestor.
