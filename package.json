@@ -48,6 +48,9 @@
     "inquirer": "^9.2.0"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "generate": "node scripts/generate.js",
+    "check:generated": "node scripts/generate.js --check",
+    "check": "npm test && npm run check:generated"
   }
 }
