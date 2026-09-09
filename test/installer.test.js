@@ -40,11 +40,12 @@ test('adapter integration preserves user text and detects modified managed block
   mkdirSync(target);
   writeFileSync(join(target, 'CLAUDE.md'), 'My instructions');
   applyInstall(planInstall(source, target, ['claude']));
-  writeFileSync(join(source, 'CLAUDE.md'), 'new adapter');
+  writeFileSync(join(source, 'CLAUDE.md'), 'new adapter $& literal');
   applyInstall(planInstall(source, target));
   const path = join(target, 'CLAUDE.md');
   assert.match(readFileSync(path, 'utf8'), /^My instructions/);
   assert.match(readFileSync(path, 'utf8'), /new adapter/);
+  assert.ok(readFileSync(path, 'utf8').includes('$& literal'));
   writeFileSync(path, readFileSync(path, 'utf8').replace('new adapter', 'custom adapter'));
   assert.equal(planInstall(source, target).changes.find(item => item.path === 'CLAUDE.md').status, 'conflict');
 });

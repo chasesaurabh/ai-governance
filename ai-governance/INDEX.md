@@ -12,6 +12,6 @@
 - Metrics: kpis/governance-kpis.md
 - Enforcement examples: ../examples/ci/
 
-Supported actions: explain, review, security-review, feature, bugfix, refactor, new-project, deploy, incident, commit, clear-context, dependencies, architecture, clarify.
+Supported actions: explain, docs, review, security-review, feature, bugfix, refactor, new-project, deploy, incident, commit, clear-context, dependencies, architecture, clarify.
 
 Do not load the full policy library for routine tasks. Generate a task packet and retrieve referenced detail as needed. Adapter loading depends on the host; verify activation in the selected tool.

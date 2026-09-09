@@ -24,13 +24,13 @@ For fallback routing, choose the workflow matching the requested action. Read-on
 | CTRL-008.2 | deploy, incident | production | web, service | ai-governance/policies/POL-008-observability.md |
 | CTRL-009.1 | dependencies | — | any | ai-governance/policies/POL-009-maintenance.md |
 | CTRL-010.3 | incident | — | any | ai-governance/policies/POL-010-incident-response.md |
-| CTRL-011.1 | feature, bugfix, refactor, new-project, dependencies | — | any | ai-governance/policies/POL-011-documentation.md |
+| CTRL-011.1 | feature, bugfix, refactor, new-project, dependencies, docs | — | any | ai-governance/policies/POL-011-documentation.md |
 | CTRL-012.1 | deploy | — | any | ai-governance/policies/POL-012-change-management.md |
 | CTRL-013.3 | — | data | any | ai-governance/policies/POL-013-data-classification.md |
 | CTRL-013.5 | — | data | any | ai-governance/policies/POL-013-data-classification.md |
 | CTRL-014.1 | feature, bugfix, refactor, new-project, dependencies | — | any | ai-governance/policies/POL-014-llm-risk-controls.md |
 | CTRL-014.2 | — | — | any | ai-governance/policies/POL-014-llm-risk-controls.md |
-| CTRL-014.5 | feature, bugfix, refactor, new-project, dependencies | — | any | ai-governance/policies/POL-014-llm-risk-controls.md |
+| CTRL-014.5 | feature, bugfix, refactor, new-project, dependencies, docs | — | any | ai-governance/policies/POL-014-llm-risk-controls.md |
 | CTRL-015.4 | bugfix | — | any | ai-governance/policies/POL-015-quality-engineering.md |
 | CTRL-016.2 | — | api | any | ai-governance/policies/POL-016-api-versioning.md |
 | CTRL-017.1 | — | — | any | ai-governance/policies/POL-017-secrets-management.md |

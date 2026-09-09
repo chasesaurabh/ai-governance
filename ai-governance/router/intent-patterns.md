@@ -3,16 +3,18 @@
 
 Rules are tested in order within each requested task clause. These are implementation references, not required model context. Negated deployment clauses and quoted examples are excluded before matching; inspect uncertain routing and use an explicit action if necessary.
 
+- clarify: `^(take a look at this|something.s off with the login)[.!?]*$`
 - clear-context: `\b(new task|fresh start|clear (the )?context|different topic|forget everything|switch to a completely)\b`
-- explain: `^(what (does|is|are|was)|explain|describe|how (do|does|did|to)|why|thanks|thank you)\b|\b(historical|last week|yesterday.s incident|incident workflow|incident response documentation)\b`
+- explain: `^(what (does|is|are|was)|what.s the best|explain|describe|how (do|does|did|to)|why|thanks|thank you)\b|\b(last week|historical).*\b(explain|describe)\b`
+- docs: `^(create|write|update|add)\b.*\b(documentation|readme|docs|runbook)\b`
 - commit: `\b(commit message|staged changes|git commit|changelog entry|conventional commit)\b|^(commit|stage)\b`
 - incident: `\b(sev[1-4]|outage|alerts? firing|error rate (spike|at|through)|everything is broken in production|production database.*connection refused|production.*users are impacted|broken in production|pages are timing out|users are reporting.*(log in|data loss))\b|\b(site|service|app|api|database) (is )?down\b`
-- security-review: `\b(security (review|audit|check|scan)|is this (sql )?(safe|secure)|check.*(xss|vulnerabilit|injection)|secrets? (exposed|leaked)|hardcoded (password|credential))`
+- security-review: `\b(security (review|audit|check|scan)|is (this (sql )?(safe|secure)|.*safe from injection)|check.*(xss|vulnerabilit|injection)|secrets? (exposed|leaked)|hardcoded (password|credential))`
 - review: `\b(review|look at (the|this|my)|check (this|my) (code|pr|implementation)|feedback on|what do you think|is this .*ok|anything wrong with)\b`
 - dependencies: `\b(update|upgrade|bump)\b.*\b(dependenc|package|version)|\bdependency update`
 - architecture: `\b(architecture decision|architectural decision|write.*adr|choose.*architecture)\b`
 - new-project: `\b(new project|from scratch|bootstrap|scaffold|new (react )?app|new microservice|greenfield)\b`
-- bugfix: `\b(fix|bug|broken|not working|crash(es|ing)?|regression|fails? when|used to work|typeerror|referenceerror|nullpointerexception|getting a? ?404|looks wrong|tests pass locally but fail)\b`
+- bugfix: `\b(fix|bug|broken|not working|crash(es|ing)?|regression|fails? when|used to work|typeerror|referenceerror|nullpointerexception|getting a? ?404|throws a 500 error|looks wrong|tests pass locally but fail)\b`
 - refactor: `\b(refactor|clean up|cleaner|simplify|restructure|extract|dry|reduce (complexity|duplication)|too complex)\b`
 - feature: `\b(add|implement|build|create|integrate|extend|i need|i want .*better|new endpoint|new page)\b`
 - deploy: `\b(deploy|ship|release|rollout|go live|promote)\b`

@@ -1,3 +1,5 @@
+> Human enterprise-policy walkthrough. Runtime profiles and applicable task controls are resolved by `ai-governance packet`; this walkthrough is not an additional always-loaded instruction set. See `ai-governance/CONFIGURATION.md`.
+
 # Example: Security Review Workflow
 
 > Prompt → Detected Workflow → Output Outline

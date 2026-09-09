@@ -12,7 +12,6 @@ name: Governance Gates
 
 permissions:
   contents: read
-  security-events: write
 
 on:
   pull_request:
@@ -73,6 +72,9 @@ jobs:
   # ── POL-006: Security — SAST ──────────────────────────────────────────────
   sast:
     name: "POL-006: SAST Scan"
+    permissions:
+      contents: read
+      security-events: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

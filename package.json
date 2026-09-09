@@ -51,6 +51,8 @@
     "test": "node --test",
     "generate": "node scripts/generate.js",
     "check:generated": "node scripts/generate.js --check",
-    "check": "npm test && npm run check:generated"
+    "check": "npm test && npm run check:generated && npm run evaluate",
+    "evaluate": "node scripts/evaluate.js",
+    "test:package": "node scripts/package-smoke.js"
   }
 }

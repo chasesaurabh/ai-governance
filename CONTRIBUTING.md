@@ -1,90 +1,34 @@
-# Contributing to AI Governance Framework
+# Contributing
 
-## How to Use This Framework
+The repository has two layers: the detailed human policy library and a compact execution catalog. Runtime controls are a curated subset, not a complete encoding of the enterprise policies.
 
-### For Your Projects
+## Source of truth
 
-1. **Copy to your project**: Copy the `ai-governance/` directory and relevant config files to your project root
-2. **Customize**: Adapt the governance documents to your team's needs
-3. **Use workflows**: Reference the workflows via slash commands in your AI coding assistant
+- `ai-governance/controls.json`: control IDs, applicability, requirements, verification, evidence and exception eligibility.
+- `lib/config.js`: validated profiles, project settings and precedence.
+- `lib/router.js`: executable routing patterns and risk detection.
+- `lib/workflows.js`: bounded action steps.
+- `lib/packet.js`: applicable controls and compact task instructions.
+- `lib/evidence.js`: declared results, task binding, exceptions and metrics.
+- `lib/installer.js`: installation planning, managed blocks, manifests and doctor.
+- `scripts/generate.js`: shared runtime, adapters, workflow and routing reference generation.
 
-### Improving This Framework
+Edit these sources and run `npm run generate`. Do not hand-edit generated files. Consumer projects should keep overrides in `governance.config.json`; catalog extensions are maintained in this source repository and distributed with a versioned package.
 
-1. **Report issues**: Open an issue for unclear guidance or missing scenarios
-2. **Suggest improvements**: PRs welcome for better practices
-3. **Add examples**: Real-world examples help everyone
+## Validation
 
-## Framework Structure
+Run `npm ci`, then `npm run check` and `npm run test:package`. The first runs regression tests, generated drift detection and instruction budgets. The second installs a package archive into an isolated temporary project and exercises its binaries. It requires npm registry access for dependencies.
 
-```
-AIGovernance/
-├── ai-governance/              # Core governance (policies, templates, router)
-│   ├── GOVERNANCE-RULES.md     # ★ SHARED RULES — single source of truth
-│   ├── policies/               # 17 enforceable policies (POL-001 to POL-017)
-│   ├── templates/              # 7 reusable templates
-│   ├── router/                 # Auto-routing engine + self-alignment
-│   ├── kpis/                   # Measurable targets
-│   └── INDEX.md                # Navigation guide
-├── .windsurf/workflows/        # 10 Windsurf workflows (ADAPTER)
-├── .windsurfrules              # Windsurf adapter — Cascade-specific (ADAPTER)
-├── .cursorrules                # Cursor adapter — Composer/Chat/Inline (ADAPTER)
-├── .cursor/rules/              # Cursor supplementary rules (ADAPTER)
-├── .github/                    # Copilot adapter — inline + Chat (ADAPTER)
-├── .aider/                     # Aider adapter — CLI + git-aware (ADAPTER)
-├── CLAUDE.md                   # Claude Code adapter — CLI + bash (ADAPTER)
-├── examples/                   # Evaluable workflow demos + CI templates
-│   ├── feature.md              # Feature workflow walkthrough
-│   ├── bugfix.md               # Bug fix workflow walkthrough
-│   ├── security-review.md      # Security review walkthrough
-│   ├── incident.md             # Incident response walkthrough
-│   ├── router-tests.md         # 50-prompt router validation suite
-│   └── ci/                     # CI/CD enforcement templates
-│       ├── github-actions/     # GitHub Actions governance gates
-│       └── azure-devops/       # Azure DevOps governance gates
-├── GOVERNANCE-MATRIX.md        # Tool compatibility matrix
-├── CHANGELOG.md                # Version history and change log
-└── README.md
-```
+Add behavioral tests for routing changes, unsafe input, upgrades, missing evidence and exception handling. Add held-out model evaluations before asserting low-reasoning reliability. Include negative prompts and scoped risk paths.
 
-### Adapter Architecture
+CI defines Windows/Linux and Node 22/24 runs. A local pass does not establish remote CI status. Line-ending attributes preserve portable scripts.
 
-Each tool adapter references `ai-governance/GOVERNANCE-RULES.md` (the single source of truth for auto-router, hard rules, and self-alignment) and adds only tool-specific behavioral instructions. This eliminates duplication while keeping instructions realistic for each tool's actual capabilities.
+## Extending controls
 
-- **Agentic tools** (Windsurf, Cursor, Claude Code): lean adapters that instruct the AI to read the shared file
-- **Limited tools** (Copilot, Aider): include essential hard rules inline since the tool can't auto-read other files
+Use existing policy control IDs and reference the correct source. Add concise requirements with observable verification and evidence. Security-floor controls must remain errors and cannot have exceptions. Keep project-type conditions explicit; HTTP-specific requirements should not apply to a CLI. Unknown configuration must fail validation.
 
-## Governance File Guidelines
+Full policy documents retain broader organizational guidance. Runtime profiles may resolve different thresholds; document that relationship rather than asking a model to reconcile competing runtime instructions.
 
-When adding or modifying governance files:
+## Package and release
 
-1. **Scope appropriately**: Each file should cover one phase/topic
-2. **Be practical**: Focus on what helps ship software
-3. **Include checklists**: Actionable items are more useful than prose
-4. **Add AI instructions**: Each file should have guidance for AI assistants
-5. **Link to related files**: Help users navigate between documents
-
-## Workflow Guidelines
-
-When adding workflows:
-
-1. **Follow the format**:
-   ```markdown
-   ---
-   description: Short description for the workflow list
-   ---
-   
-   # Workflow Title
-   
-   Steps...
-   ```
-
-2. **Reference governance files**: Workflows should use the governance docs
-3. **Mark safe commands**: Use `// turbo` for commands safe to auto-run
-4. **Include verification steps**: Each workflow should verify completion
-
-## Principles
-
-- **Tool-agnostic core**: Governance files should work with any AI assistant
-- **Native integrations**: Workflows leverage each tool's specific features
-- **Practical over theoretical**: Focus on real developer workflows
-- **Composable**: Documents can be combined for complex tasks
+The package allowlist includes runtime modules, controls, adapters, workflows and CI examples. Source-only evaluations and tests run in this development checkout. Packaging tests verify local-only files are absent. Publishing and remote pushes are separate release actions.

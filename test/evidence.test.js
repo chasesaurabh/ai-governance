@@ -20,6 +20,7 @@ test('missing and unverified evidence never counts as complete', () => {
 });
 test('task/config changes and duplicate or fabricated control IDs invalidate evidence', () => {
   assert.throws(() => checkEvidence(createPacket('Deploy', resolveConfig()), complete()), /does not match/);
+  assert.throws(() => checkEvidence(createPacket('Fix a different bug', resolveConfig()), complete()), /does not match/);
   const record = complete(); record.controls.push(record.controls[0]);
   assert.throws(() => checkEvidence(packet, record), /duplicate/);
 });

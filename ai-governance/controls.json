@@ -364,7 +364,8 @@
           "bugfix",
           "refactor",
           "new-project",
-          "dependencies"
+          "dependencies",
+          "docs"
         ],
         "risks": [],
         "projectTypes": []
@@ -478,7 +479,8 @@
           "bugfix",
           "refactor",
           "new-project",
-          "dependencies"
+          "dependencies",
+          "docs"
         ],
         "risks": [],
         "projectTypes": []

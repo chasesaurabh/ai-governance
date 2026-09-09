@@ -1,3 +1,13 @@
+# Unreleased — Configurable execution layer
+
+- Add versioned installation, preview, managed adapter blocks, safe updates and doctor. Require Node.js 22+.
+- Add 28 structured controls across 17 policies, project profiles, configurable commands and protected safeguards.
+- Generate compact adapters and workflows; separate actions from risks and preserve task order.
+- Add task-specific checklists, evidence statuses, scoped expiring exceptions and completion metrics.
+- Add executable routing cases, instruction budgets, external model-result scoring and package smoke checks.
+- Fix unsafe CI text interpolation, coverage validation and mandatory gate result handling.
+- Replace shell-only installation logic with a shared Node entry point. No publication is implied by these source changes.
+
 # Changelog
 
 All notable changes to the AI Governance Framework are documented here.
