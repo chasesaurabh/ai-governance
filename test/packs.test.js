@@ -1,0 +1,43 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fixture } from './changes.test.js';
+import { readPacks } from '../lib/packs.js';
+import { loadConfig } from '../lib/config.js';
+import { checkChanges } from '../lib/check.js';
+import { createBaseline, applyBaseline } from '../lib/baseline.js';
+import { trustProject, runChecks } from '../lib/runner.js';
+const write = (root, path, data) => writeFileSync(join(root, path), JSON.stringify(data));
+test('packs require exact version/integrity and protect organization thresholds', t => {
+  const root = fixture(t); mkdirSync(join(root, 'policy'));
+  write(root, 'policy/package.json', { name: '@example/policy', version: '1.0.0', main: 'do-not-execute.js' });
+  write(root, 'policy/governance-pack.json', { schemaVersion: 1, owner: 'Platform', escalation: 'team/security', config: { mode: 'assist', thresholds: { coverage: 85 } }, minimums: { coverage: 85 }, protectedControls: ['CTRL-004.1'] });
+  const input = { packs: [{ path: 'policy', version: '1.0.0' }] };
+  write(root, 'governance.config.json', input);
+  assert.throws(() => loadConfig(root), /Unpinned/);
+  write(root, 'governance.packs.lock.json', { schemaVersion: 1, packs: readPacks(root, input.packs, false) });
+  assert.equal(loadConfig(root).thresholds.coverage, 85);
+  write(root, 'governance.config.json', { ...input, thresholds: { coverage: 70 } });
+  assert.throws(() => loadConfig(root), /minimum/);
+  write(root, 'governance.config.json', { ...input, overrides: { 'CTRL-004.1': { severity: 'warning' } } });
+  assert.throws(() => loadConfig(root), /cannot be weakened/);
+  assert.throws(() => readPacks(root, [{ path: '../outside', version: '1.0.0' }]), /escapes/);
+});
+test('scope executes its own command in its package directory', async t => {
+  const root = fixture(t); mkdirSync(join(root, 'api'));
+  write(root, 'governance.config.json', { scopes: [{ path: 'api', config: { commands: { test: 'node -e "if(require(\'path\').basename(process.cwd())!==\'api\')process.exit(1)"' } } }] });
+  trustProject(root, 'api'); assert.equal((await runChecks(root, { scope: 'api' })).complete, true);
+  assert.throws(() => loadConfig(root, '../api'));
+});
+test('baselines cannot hide protected findings and changed files invalidate entries', t => {
+  const root = fixture(t); mkdirSync(join(root, 'auth'));
+  writeFileSync(join(root, 'auth/login.js'), 'initial');
+  const report = checkChanges(root);
+  write(root, 'governance.baseline.json', createBaseline(root, report, {}));
+  const baselined = applyBaseline(root, checkChanges(root), {});
+  assert.equal(baselined.findings.find(f => f.rule === 'AUTH-001').baselined, false);
+  assert.equal(baselined.findings.find(f => f.rule === 'TEST-001').baselined, true);
+  writeFileSync(join(root, 'auth/login.js'), 'changed');
+  assert.equal(applyBaseline(root, checkChanges(root), {}).findings.find(f => f.rule === 'TEST-001').baselined, false);
+});
