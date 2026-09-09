@@ -1,8 +1,31 @@
 # AI Governance Framework
 
-Configurable engineering controls for AI coding assistants. The framework resolves a requested task into compact instructions, applicable controls and an evidence checklist. Detailed policies remain available for human review.
+Local governance checks and verification for AI-assisted development. The framework resolves a requested task into compact instructions, applicable controls and an evidence checklist. Detailed policies remain available for human review.
 
 **Instructions guide behavior. Tests, CI gates and reviewers verify it.** The runtime contains 28 curated controls spanning 17 policies; it does not certify complete organizational compliance.
+
+## Start a daily workflow
+
+Requires Node.js 22+ and Git. In your project:
+
+```bash
+npx ai-governance-setup@2.0.0 --tools copilot,claude,cursor,devin --save-dev .
+npx ai-governance check
+```
+
+Setup detects project commands and preserves existing configuration. Review governance.config.json and your repository scripts before authorizing execution:
+
+```bash
+npx ai-governance trust --accept
+npx ai-governance run --checks test
+npx ai-governance summary
+```
+
+Checks explain dependency, test, authentication, API, database and CI changes. The runner records actual command exits and marks results stale when source or configuration changes. Missing tools remain unverified. Teams can adopt required checks gradually with pinned organization packs, package scopes and reviewed baselines.
+
+[Quickstart](docs/QUICKSTART.md) · [Daily commands](docs/DAILY-WORK.md) · [AI integrations](docs/INTEGRATIONS.md) · [Organization packs](docs/ORGANIZATION-PACKS.md) · [Two-week pilot](docs/PILOT.md) · [Migration and release](docs/RELEASING.md)
+
+Local commands do not upload source or prompts. Pilot measurement is optional, local and disabled by default. Configured checks and npm installations can access the network.
 
 ## Install
 
@@ -28,7 +51,7 @@ Doctor checks missing or modified tracked content. It does not verify tool activ
 
 ## Configure once
 
-Copy `ai-governance/config.example.json` to `governance.config.json` in your project. Select library, CLI, web or service; choose a starter, team or regulated profile; and fill in verified test/lint/build/scanning commands. Configure risk path prefixes for sensitive modules. Missing commands are unavailable, never passing checks.
+Setup creates a detected configuration when missing. Alternatively, copy `ai-governance/config.example.json` to `governance.config.json` in your project. Select library, CLI, web or service; choose a starter, team or regulated profile; and fill in verified test/lint/build/scanning commands. Configure risk path prefixes for sensitive modules. Missing commands are unavailable, never passing checks.
 
 Validate with the `ai-governance check-config .` package binary. Without a global/local binary on PATH, use `npx --package ai-governance-setup ai-governance check-config .`. In this source checkout, use `node bin/governance.js check-config .`.
 
@@ -74,6 +97,7 @@ The validator checks structure and declared results; it does not authenticate re
 | Cursor | `.cursor/rules/governance.mdc` | Project rule with frontmatter; `.cursorrules` retained as a compatibility pointer |
 | Windsurf | `.windsurfrules` plus `.windsurf/workflows/` | Shared runtime and workflow files |
 | GitHub Copilot | `.github/copilot-instructions.md` | Repository instructions; capabilities vary by host/mode |
+| Devin | `AGENTS.md` | Repository instructions; verify loading in a real session |
 | Aider | `.aider/conventions.md` | Attach conventions/shared instructions through the tool's context mechanism |
 
 Verify activation in your selected host. Files alone do not prove instructions loaded. If file access or execution is unavailable, use the manual workflow fallback and report unverified checks. See [the compatibility matrix](GOVERNANCE-MATRIX.md).

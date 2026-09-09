@@ -3,6 +3,9 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { adapters, planInstall, applyInstall, doctor, planUninstall, applyUninstall } from '../lib/installer.js';
 import { installRuntime } from '../lib/npm.js';
+import { discover } from '../lib/discovery.js';
+import { safePath } from '../lib/installer.js';
+import { existsSync, writeFileSync } from 'node:fs';
 
 const source = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 async function main() {
@@ -54,11 +57,19 @@ async function main() {
   }
   const plan = planInstall(source, target, tools);
   plan.changes.forEach(item => console.log(`${item.status}: ${item.path}`));
-  if (!preview) applyInstall(plan);
+  if (!preview) {
+    applyInstall(plan);
+    const configPath = safePath(target, 'governance.config.json');
+    if (!existsSync(configPath)) {
+      writeFileSync(configPath, `${JSON.stringify(discover(target).config, null, 2)}\n`);
+      console.log('Created project configuration from manifests. Review detected/suggested commands before execution.');
+    }
+  }
   if (saveDev && !preview) installRuntime(target, plan.manifest.version);
   if (saveDev && preview) console.log(`Would install exact development dependency ai-governance-setup@${plan.manifest.version}`);
   const conflicts = plan.changes.filter(item => item.status === 'conflict').length;
   console.log(`${preview ? 'Preview only' : 'Installation complete'}: ${target}; ${conflicts} conflicts preserved.`);
+  if (!preview) console.log('Next: npx ai-governance check --staged (requires the local runtime or --save-dev).');
   if (conflicts) process.exitCode = 1;
 }
 main().catch(error => { console.error(error.message); process.exitCode = 1; });

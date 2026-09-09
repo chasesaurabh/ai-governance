@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { fixture } from './changes.test.js';
+import { fixture } from '../test-support/fixtures.js';
 import { readPacks } from '../lib/packs.js';
 import { loadConfig } from '../lib/config.js';
 import { checkChanges } from '../lib/check.js';

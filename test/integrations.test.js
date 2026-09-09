@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { fixture } from './changes.test.js';
+import { fixture } from '../test-support/fixtures.js';
 import { configureHooks, hookResponse } from '../lib/integrations.js';
 test('native hooks preserve other settings and remove only owned entries', t => {
   const root = fixture(t);

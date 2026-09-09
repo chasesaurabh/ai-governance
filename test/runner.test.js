@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { fixture } from './changes.test.js';
+import { fixture } from '../test-support/fixtures.js';
 import { trustProject, runChecks, verificationSummary } from '../lib/runner.js';
 test('runner requires trust, observes outcomes and invalidates changed source/config', async t => {
   const root = fixture(t);
