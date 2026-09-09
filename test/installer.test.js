@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { planInstall, applyInstall, doctor } from '../lib/installer.js';
+import { planInstall, applyInstall, doctor, planUninstall, applyUninstall } from '../lib/installer.js';
 
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'governance-test-'));
@@ -54,4 +54,17 @@ test('invalid tools and source target are rejected before writes', t => {
   assert.throws(() => planInstall(source, target, ['unknown']), /Unknown tool/);
   assert.throws(() => planInstall(source, source), /framework source/);
   assert.equal(existsSync(target), false);
+});
+test('uninstall previews and preserves edits and surrounding user instructions', t => {
+  const { source, target } = fixture(t);
+  mkdirSync(target); writeFileSync(join(target, 'CLAUDE.md'), 'User instructions');
+  applyInstall(planInstall(source, target, ['claude']));
+  writeFileSync(join(target, 'ai-governance/core.md'), 'User customization');
+  const plan = planUninstall(target);
+  assert.ok(existsSync(join(target, 'examples/ci/check.cjs')));
+  applyUninstall(plan);
+  assert.equal(readFileSync(join(target, 'CLAUDE.md'), 'utf8').trim(), 'User instructions');
+  assert.equal(readFileSync(join(target, 'ai-governance/core.md'), 'utf8'), 'User customization');
+  assert.equal(existsSync(join(target, 'examples/ci/check.cjs')), false);
+  assert.ok(existsSync(join(target, '.ai-governance-install.json')));
 });
