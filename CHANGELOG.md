@@ -1,9 +1,8 @@
-# 3.0.0 — Devin integration and current tool guidance
+# 2.0.1 — Devin integration and current tool guidance
 
 - Use Devin as the supported adapter name and AGENTS.md as its entry point. Remove redundant host-specific workflow copies; shared task workflows remain available.
 - Refresh Claude, Cursor and Devin model selection and enterprise data guidance from official documentation checked 2026-09-09.
 - Preserve existing files when updating manifests that contain adapters outside the current supported set. Explicit unknown tool selections still fail.
-- Major version: supported adapter names and packaged adapter layout changed.
 
 # 2.0.0 — Enterprise daily workflow
 

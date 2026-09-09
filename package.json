@@ -1,6 +1,6 @@
 {
   "name": "ai-governance-setup",
-  "version": "3.0.0",
+  "version": "2.0.1",
   "description": "One-command setup for AI Governance Framework — enforceable policies for AI coding assistants",
   "type": "module",
   "bin": {
