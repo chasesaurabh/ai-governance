@@ -18,7 +18,7 @@
 | **Security Review** | "security", "vulnerability", "CVE", "injection", "XSS", "is this secure", "secrets exposed" | POL-006 → POL-013 → POL-017 |
 | **Bug Fix** | "fix", "bug", "broken", "not working", "error", "crash", "regression", "fails when" | POL-004 → POL-005 → POL-015 |
 | **Deploy** | "deploy", "release", "ship", "push to prod", "go live", "rollout" | POL-007 → POL-008 → POL-012 |
-| **New Project** | "new project", "from scratch", "bootstrap", "scaffold", "init", "create a new app" | POL-001 → POL-002 → POL-004 → POL-007 |
+| **New Project** | "new project", "from scratch", "bootstrap", "scaffold", "init", "create a new app" | POL-001 → POL-002 → POL-004 → POL-005 → POL-006 → POL-007 |
 | **Add Feature** | "add feature", "implement", "build", "create [endpoint/component/page]", "I need a", "integrate" | POL-001 → POL-003 → POL-005 → POL-004 → POL-006 |
 | **Refactor** | "refactor", "clean up", "simplify", "extract", "DRY", "too complex", "tech debt" | POL-004 → POL-005 → POL-009 |
 | **Code Review** | "review", "look at this code", "check this PR", "feedback on", "is this OK" | All applicable policies |
@@ -26,6 +26,8 @@
 | **Clear Context** | "new task", "fresh start", "clear context", "start over", "different topic", "switch to" | Summarize → fresh start |
 
 ### Priority Order (highest first)
+
+First identify the requested action. Explanations and quoted or historical incidents do not trigger operational work. Explicit task ordering and prerequisites take precedence over this tie-break order. Security adds controls to feature work; it does not replace the requested action.
 
 1. **Incident** — production is down (urgency trumps all)
 2. **Security Review** — vulnerability or security concern
@@ -84,7 +86,7 @@ Full routing details: `ai-governance/router/auto-router.md` and `ai-governance/r
 ### Code Quality (POL-004)
 
 - ALWAYS match existing code style and naming conventions
-- ALWAYS keep functions ≤ 50 lines, cyclomatic complexity ≤ 15
+- Keep functions ≤ 50 lines as a guideline (80 hard limit); cyclomatic complexity ≤ 15
 - ALWAYS use dependency injection over hard-coded dependencies
 - NEVER leave `console.log`/`print()` in production code — use structured logger
 - NEVER leave `TODO` without a ticket reference
@@ -124,8 +126,8 @@ Full routing details: `ai-governance/router/auto-router.md` and `ai-governance/r
 | Task | Primary Policies | Steps |
 |------|-----------------|-------|
 | **New feature** | POL-001 → POL-003 → POL-005 → POL-004 → POL-006 | Requirements → Design → Tests → Implement → Security |
-| **Bug fix** | POL-004 → POL-005 | Reproduce → Regression test → Root cause fix |
-| **New project** | POL-001 → POL-002 → POL-004 → POL-007 | Requirements → Architecture → Standards → Deployment |
+| **Bug fix** | POL-004 → POL-005 → POL-015 | Reproduce → Regression test → Root cause fix |
+| **New project** | POL-001 → POL-002 → POL-004 → POL-005 → POL-006 → POL-007 | Requirements → Architecture → Standards → Deployment |
 | **Architecture decision** | POL-002 → POL-016 | ADR with ≥ 2 options → Review → Decide |
 | **Deployment** | POL-007 → POL-008 → POL-012 | Pipeline → Health checks → Progressive rollout |
 | **Incident** | POL-010 → POL-008 | Triage → Mitigate → Root cause → Post-mortem |

@@ -38,9 +38,12 @@
   "author": "chasesaurabh",
   "license": "MIT",
   "engines": {
-    "node": ">=16.7.0"
+    "node": ">=22"
   },
   "dependencies": {
     "inquirer": "^9.2.0"
+  },
+  "scripts": {
+    "test": "node --test"
   }
 }
