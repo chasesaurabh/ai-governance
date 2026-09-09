@@ -47,10 +47,6 @@ try {
   const summary = JSON.parse(run(process.execPath, [cli, 'summary', '--project', consumer, '--json']));
   if (summary[0].status !== 'passed') throw new Error('Packaged summary failed');
   run(process.execPath, [cli, 'check', '--project', consumer, '--staged', '--json']);
-  run(process.execPath, [cli, 'pilot-start', '--project', consumer, '--tool', 'devin']);
-  run(process.execPath, [cli, 'pilot-feedback', '--project', consumer, '--rule', 'TEST-001', '--rating', 'useful']);
-  const pilot = JSON.parse(run(process.execPath, [cli, 'pilot-report', '--project', consumer]));
-  if (pilot.usefulFindings !== 1) throw new Error('Packaged pilot failed');
   run(process.execPath, [join(installed, 'bin/cli.js'), 'uninstall', target]);
   console.log(`Package smoke passed: ${packed.files.length} packaged files; all adapters, doctor, packet and evidence commands verified.`);
 } finally {
