@@ -1,6 +1,6 @@
 {
   "name": "ai-governance-setup",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "One-command setup for AI Governance Framework — enforceable policies for AI coding assistants",
   "type": "module",
   "bin": {
@@ -43,10 +43,10 @@
   "author": "chasesaurabh",
   "license": "MIT",
   "engines": {
-    "node": ">=22"
+    "node": "^22.13.0 || >=24.0.0"
   },
   "dependencies": {
-    "inquirer": "^9.2.0"
+    "inquirer": "14.2.2"
   },
   "scripts": {
     "test": "node --test",

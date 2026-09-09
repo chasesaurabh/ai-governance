@@ -1,10 +1,10 @@
 # First useful check
 
-Use a Git project with Node.js 22 or newer. Preview installation, then install the adapters you use and the exact local runtime:
+Use a Git project with Node.js 22.13+ or 24+ (24 LTS recommended). Preview installation, then install the adapters you use and the exact local runtime:
 
 ```bash
-npx ai-governance-setup@2.0.1 --tools copilot,claude,cursor,devin --dry-run .
-npx ai-governance-setup@2.0.1 --tools copilot,claude,cursor,devin --save-dev .
+npx ai-governance-setup@2.0.2 --tools copilot,claude,cursor,devin --dry-run .
+npx ai-governance-setup@2.0.2 --tools copilot,claude,cursor,devin --save-dev .
 npx ai-governance check
 ```
 

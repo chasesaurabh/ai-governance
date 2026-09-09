@@ -1,3 +1,9 @@
+# 2.0.2 — Runtime and dependency updates
+
+- Update Inquirer to 14.2.2 and refresh its dependency tree. Node.js 22 now requires 22.13 or newer; Node.js 24 LTS is the recommended default.
+- Test Node 22.13, latest 22/24 and current Node 26 on Windows and Linux.
+- Update checkout/setup-node, CodeQL and Gitleaks actions; use Node 24 in GitHub and Azure examples.
+
 # 2.0.1 — Devin integration and current tool guidance
 
 - Use Devin as the supported adapter name and AGENTS.md as its entry point. Remove redundant host-specific workflow copies; shared task workflows remain available.

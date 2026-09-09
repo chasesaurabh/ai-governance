@@ -6,10 +6,10 @@ Local governance checks and verification for AI-assisted development. The framew
 
 ## Start a daily workflow
 
-Requires Node.js 22+ and Git. In your project:
+Requires Node.js 22.13+ or 24+ (24 LTS recommended) and Git. In your project:
 
 ```bash
-npx ai-governance-setup@2.0.1 --tools copilot,claude,cursor,devin --save-dev .
+npx ai-governance-setup@2.0.2 --tools copilot,claude,cursor,devin --save-dev .
 npx ai-governance check
 ```
 
@@ -29,7 +29,7 @@ Local commands do not upload source or prompts. Configured checks and npm instal
 
 ## Install
 
-Requires Node.js 22 or newer.
+Requires Node.js 22.13+ or 24+ (24 LTS recommended).
 
 ```bash
 npx ai-governance-setup
@@ -114,7 +114,7 @@ npm run check
 npm run test:package
 ```
 
-Checks cover routing, controls, evidence, installation and generated drift. Package smoke testing builds an archive, installs it into a temporary consumer, and exercises its binaries. CI defines Windows/Linux and Node 22/24 checks; a local pass is not a claim that remote CI has run.
+Checks cover routing, controls, evidence, installation and generated drift. Package smoke testing builds an archive, installs it into a temporary consumer, and exercises its binaries. CI defines Windows/Linux and Node 22.13, latest 22/24 and 26 checks; a local pass is not a claim that remote CI has run.
 
 `npm run evaluate` reports rule accuracy and approximate instruction sizes. [The evaluation protocol](eval/README.md) explains independently reviewed comparisons across models and reasoning settings. No provider benchmarks or token-billing savings are claimed from these static checks.
 
