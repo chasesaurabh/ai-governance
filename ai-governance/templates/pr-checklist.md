@@ -99,3 +99,7 @@ _Any additional context for reviewers:_
 **Usage Level**: [ ] None / [ ] Completion suggestions / [ ] Block generation / [ ] Full file generation
 **Files AI-generated/modified**: _List files_
 **Reviewer verification**: [ ] Verified AI output is correct and complete
+
+## Structured task evidence
+
+Use `ai-governance checklist` and `ai-governance evidence-init` to generate applicable items; validate declared results with `ai-governance evidence-check`. See `ai-governance/EVIDENCE.md` for statuses, scoped exceptions, expiration and completion metrics. This human template remains available for broader organizational review.
