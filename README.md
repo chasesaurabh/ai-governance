@@ -23,9 +23,9 @@ npx ai-governance summary
 
 Checks explain dependency, test, authentication, API, database and CI changes. The runner records actual command exits and marks results stale when source or configuration changes. Missing tools remain unverified. Teams can adopt required checks gradually with pinned organization packs, package scopes and reviewed baselines.
 
-[Quickstart](docs/QUICKSTART.md) · [Daily commands](docs/DAILY-WORK.md) · [AI integrations](docs/INTEGRATIONS.md) · [Organization packs](docs/ORGANIZATION-PACKS.md) · [Two-week pilot](docs/PILOT.md) · [Migration and release](docs/RELEASING.md)
+[Quickstart](docs/QUICKSTART.md) · [Daily commands](docs/DAILY-WORK.md) · [AI integrations](docs/INTEGRATIONS.md) · [Organization packs](docs/ORGANIZATION-PACKS.md) · [Migration and release](docs/RELEASING.md)
 
-Local commands do not upload source or prompts. Pilot measurement is optional, local and disabled by default. Configured checks and npm installations can access the network.
+Local commands do not upload source or prompts. Configured checks and npm installations can access the network.
 
 ## Install
 

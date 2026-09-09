@@ -11,7 +11,7 @@ try {
   if (await runDaily(command, args)) {
     // Dedicated daily-work command handled above.
   } else if (command === '--help' || !command) {
-    console.log('Commands: init, inspect, check, explain, trust, run, summary, hooks, pack-lock, baseline, pilot-start, pilot-stop, pilot-feedback, pilot-help, pilot-report, check-config, packet, checklist, evidence-init, evidence-check. Daily commands accept --project path. Use init --project path --dry-run to preview onboarding.');
+    console.log('Commands: init, inspect, check, explain, trust, run, summary, hooks, pack-lock, baseline, check-config, packet, checklist, evidence-init, evidence-check. Daily commands accept --project path. Use init --project path --dry-run to preview onboarding.');
   } else if (command === 'check-config') {
     if (args.length > 1) throw new Error('check-config accepts one directory');
     validateCatalog();

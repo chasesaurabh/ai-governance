@@ -3,7 +3,7 @@
 - Add project discovery, change checks, explicit command trust, revision-bound verification and summaries.
 - Add Claude/Cursor hooks, Copilot scoped instructions and Devin repository instructions.
 - Add pinned data-only organization packs, scoped settings, adoption modes and content-bound baselines.
-- Add opt-in local pilot measurements and a self-service guide for four AI tools.
+- Add a self-service quickstart for four AI tools.
 - Add exact runtime installation, safe uninstall and a tested npm release workflow.
 
 ## Configurable execution layer

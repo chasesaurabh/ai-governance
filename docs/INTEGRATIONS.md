@@ -1,4 +1,4 @@
-# Pilot integrations
+# AI tool integrations
 
 Initialize selected repository adapters with `ai-governance init --tools claude,cursor,copilot,devin`. Devin receives AGENTS.md; existing instructions are preserved through managed blocks. Copilot gets a repository entry and scoped security instructions. Cursor gets a valid MDC rule. These instructions call the same CLI and do not certify host activation.
 

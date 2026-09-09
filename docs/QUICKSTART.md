@@ -24,4 +24,4 @@ If no test command was detected, configure your actual command first. A successf
 
 Before opening a PR, run `check --base origin/main` (using your repository's actual base branch), run relevant configured checks, and copy the summary into the PR. Commit the generated instructions, configuration, installation manifest and dependency lockfile after reviewing them.
 
-For optional Claude/Cursor context hooks, see [integrations](INTEGRATIONS.md). For a measured rollout with Copilot, Claude Code, Cursor and Devin, use the [pilot guide](PILOT.md). No live adoption results are implied by this demonstration.
+For optional Claude/Cursor context hooks, see [integrations](INTEGRATIONS.md).
