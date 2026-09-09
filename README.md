@@ -27,6 +27,18 @@ cd ai-governance && ./install.sh /path/to/your-project
 Non-interactive: `./install.sh --all /path` · `./install.sh --tools windsurf,cursor /path` · `./install.sh --core-only /path`
 </details>
 
+## Installation management
+
+Requires Node.js 22 or newer. The shell entry point delegates to the Node installer and is intended for a local clone.
+
+```bash
+npx ai-governance-setup --tools claude,cursor --dry-run /path/to/project
+npx ai-governance-setup --tools claude,cursor /path/to/project
+npx ai-governance-setup doctor /path/to/project
+```
+
+Rerun setup to update untouched framework files. Modified files are preserved and reported as conflicts (exit code 1); review them manually. Adapter entry points use managed blocks so existing project instructions survive. Commit `.ai-governance-install.json` with your installation to retain upgrade history. CI examples are included under `examples/ci/`. Preview makes no changes.
+
 ## How It Works
 
 The framework includes an **auto-router** that reads your prompt, detects what you're trying to do, and applies the right governance workflow. No setup, no slash commands needed.

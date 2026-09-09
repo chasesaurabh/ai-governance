@@ -16,7 +16,10 @@
     ".github/copilot-instructions.md",
     ".aider/",
     "CLAUDE.md",
-    "GOVERNANCE-MATRIX.md"
+    "GOVERNANCE-MATRIX.md",
+    "lib/",
+    "examples/ci/",
+    "install.sh"
   ],
   "keywords": [
     "ai",
