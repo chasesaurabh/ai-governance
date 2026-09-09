@@ -1,3 +1,10 @@
+# 3.0.0 — Devin integration and current tool guidance
+
+- Use Devin as the supported adapter name and AGENTS.md as its entry point. Remove redundant host-specific workflow copies; shared task workflows remain available.
+- Refresh Claude, Cursor and Devin model selection and enterprise data guidance from official documentation checked 2026-09-09.
+- Preserve existing files when updating manifests that contain adapters outside the current supported set. Explicit unknown tool selections still fail.
+- Major version: supported adapter names and packaged adapter layout changed.
+
 # 2.0.0 — Enterprise daily workflow
 
 - Add project discovery, change checks, explicit command trust, revision-bound verification and summaries.
@@ -30,7 +37,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Policy 
 - **`ai-governance/GOVERNANCE-RULES.md`** — single source of truth for auto-router, hard rules, self-alignment (eliminates duplication across 5 adapter files)
 
 ### Changed
-- **`.windsurfrules`** — rewritten for Windsurf/Cascade: explicit `read_file` instructions to load shared rules and workflow files, Cascade tool usage guide (`code_search`, `edit`, `run_command`, `create_memory`), `// turbo` awareness. **Fixes auto-trigger issue.**
 - **`.cursorrules`** — rewritten for Cursor: references shared rules, mode-specific guidance (Composer / Chat / Inline edit), `@` mention patterns, `.cursor/rules/` persistence
 - **`.cursor/rules/governance.md`** — rewritten as Cursor mode-specific supplement (no longer duplicates `.cursorrules`)
 - **`CLAUDE.md`** — rewritten for Claude Code CLI: references shared rules, bash commands for verification, `#` file references, `/clear` and `/compact` commands, `CLAUDE.md` tree for subdirectory instructions
@@ -73,8 +79,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Policy 
 - Auto-router with 10 intent types and priority ordering
 - Self-alignment system (self-align, self-heal, self-learn)
 - KPI dashboard with 60+ measurable targets
-- 5 tool adapters (Windsurf, Cursor, Copilot, Claude Code, Aider)
-- 10 Windsurf workflows
+- 5 tool adapters (Devin, Cursor, Copilot, Claude Code, Aider)
+- 10 Devin workflows
 - Node CLI (`npx ai-governance-setup`) and shell installer
 - GOVERNANCE-MATRIX.md with enforcement mapping
 

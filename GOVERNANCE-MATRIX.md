@@ -6,11 +6,11 @@ The framework separates host adapters, generated task instructions, project sett
 |---|---|---|
 | Claude Code | CLAUDE.md | Read shared runtime; use only available tools; never invent verification |
 | Cursor | .cursor/rules/governance.mdc, compatibility pointers | MDC entry loads shared runtime; check activation in the host |
-| Windsurf | .windsurfrules, .windsurf/workflows/ | Shared workflow definitions; authorized actions only |
+| Devin | AGENTS.md | Shared runtime and task workflows; verify loading in the selected Devin agent |
 | Copilot | .github/copilot-instructions.md | If files cannot be loaded, provide the relevant workflow explicitly |
 | Aider | .aider/conventions.md | Attach conventions and shared runtime; setup does not modify Aider launch arguments |
 
-Cursor project rules use `.mdc` with frontmatter; plain `.md` rule files are ignored by that system. Source: [Cursor rule documentation](https://prod.cursor.com/docs/rules), checked September 2026. Generated-file and installation checks confirm file layout, not actual activation inside external hosts.
+Cursor project rules use `.mdc` with frontmatter; plain `.md` rule files are ignored by that system. Source: [Cursor rule documentation](https://cursor.com/docs/rules), checked September 2026. Generated-file and installation checks confirm file layout, not actual activation inside external hosts.
 
 | Layer | What it establishes | What it does not establish |
 |---|---|---|

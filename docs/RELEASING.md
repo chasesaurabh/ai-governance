@@ -1,8 +1,14 @@
+# Version 3 upgrade
+
+Version 3 supports `devin`, `cursor`, `copilot`, `claude` and `aider`. Select `--tools devin` to install AGENTS.md. Shared task workflows live in ai-governance/workflows/. The supported adapter names and packaged layout changed, requiring a major version under this repository's version policy.
+
+Installation preserves existing files and user edits. Manifest entries for adapters outside the supported set do not prevent selecting current adapters; their tracked files remain available to doctor and safe uninstall. Preview the update and review the resulting files before committing.
+
 # Release and compatibility
 
 Version 2 requires Node.js 22 or newer. It adds the ai-governance runtime binary; v1 only exposed setup. Existing adapter files are integrated through managed blocks. Customized legacy core files need manual reconciliation. Preview upgrades first.
 
-Publishing: configure npm's trusted publisher for this repository and `.github/workflows/release.yml`, and configure the `npm-release` GitHub environment with the desired reviewers. Push a reviewed tag exactly matching package.json, such as v2.0.0. The workflow verifies, tests the archive and publishes through OIDC. Do not reuse an already published version. See https://docs.npmjs.com/trusted-publishers/ for npm account setup. Repository code alone cannot configure account ownership or grant publishing rights.
+Publishing: configure npm's trusted publisher for this repository and `.github/workflows/release.yml`, and configure the `npm-release` GitHub environment with the desired reviewers. Push a reviewed tag exactly matching package.json, such as v3.0.0. The workflow verifies, tests the archive and publishes through OIDC. Do not reuse an already published version. See https://docs.npmjs.com/trusted-publishers/ for npm account setup. Repository code alone cannot configure account ownership or grant publishing rights.
 
 For persistent use in a Node project, setup accepts `--save-dev` and installs the exact framework version with lifecycle scripts disabled. Use `npx ai-governance` thereafter. An npm install still performs registry access and updates package/lock files. Existing npm proxy, registry and certificate configuration is respected; no custom network bypass is used. In other stacks, use a user-managed npm installation or a dedicated tooling directory. After dependencies are installed, local runtime commands work offline except explicitly configured network checks.
 

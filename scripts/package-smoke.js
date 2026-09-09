@@ -9,7 +9,7 @@ const run = (file, args, cwd = root) => execFileSync(file, args, { cwd, encoding
 try {
   const packed = JSON.parse(run(process.execPath, [npm, 'pack', '--json', '--pack-destination', root], process.cwd()))[0];
   if (packed.files.some(f => /MILESTONES\.local|\.git\//.test(f.path))) throw new Error('Local-only files entered package');
-  for (const path of ['lib/config.js', 'lib/packet.js', 'lib/evidence.js', 'ai-governance/controls.json', '.cursor/rules/governance.mdc', 'examples/ci/check-coverage.cjs']) {
+  for (const path of ['AGENTS.md', 'docs/TOOLS-AND-MODELS.md', 'lib/config.js', 'lib/packet.js', 'lib/evidence.js', 'ai-governance/controls.json', '.cursor/rules/governance.mdc', 'examples/ci/check-coverage.cjs']) {
     if (!packed.files.some(f => f.path === path)) throw new Error(`Missing package file: ${path}`);
   }
   const consumer = join(root, 'consumer'); mkdirSync(consumer);

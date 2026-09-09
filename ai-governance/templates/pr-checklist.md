@@ -95,7 +95,7 @@ _Any additional context for reviewers:_
 
 ## AI Usage Disclosure
 
-**AI Tool Used**: [ ] None / [ ] Windsurf / [ ] Copilot / [ ] Claude Code / [ ] Cursor / [ ] Other: ____
+**AI Tool Used**: [ ] None / [ ] Devin / [ ] Copilot / [ ] Claude Code / [ ] Cursor / [ ] Other: ____
 **Usage Level**: [ ] None / [ ] Completion suggestions / [ ] Block generation / [ ] Full file generation
 **Files AI-generated/modified**: _List files_
 **Reviewer verification**: [ ] Verified AI output is correct and complete
