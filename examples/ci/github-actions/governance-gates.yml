@@ -10,6 +10,9 @@
 
 name: Governance Gates
 
+permissions:
+  contents: read
+
 on:
   pull_request:
     branches: [main, develop]
@@ -41,7 +44,7 @@ jobs:
 
       # Replace with your project's format check command
       - name: Format check
-        run: npm run format:check || true  # Remove '|| true' once formatter is configured
+        run: npm run format:check
 
   # ── POL-005: Testing ──────────────────────────────────────────────────────
   test:
@@ -64,18 +67,14 @@ jobs:
       # Coverage gate — adjust threshold to match your team's target
       # POL-005 recommends: ≥ 80% line coverage for new code
       - name: Coverage gate
-        run: |
-          COVERAGE=$(npx coverage-summary --json | jq '.total.lines.pct')
-          echo "Coverage: ${COVERAGE}%"
-          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-            echo "::error::Coverage ${COVERAGE}% is below the 80% gate (POL-005)"
-            exit 1
-          fi
-        continue-on-error: false  # Set to true if ramping up coverage gradually
+        run: node examples/ci/check-coverage.cjs coverage/coverage-summary.json 80
 
   # ── POL-006: Security — SAST ──────────────────────────────────────────────
   sast:
     name: "POL-006: SAST Scan"
+    permissions:
+      contents: read
+      security-events: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -146,8 +145,9 @@ jobs:
       # Check if PR body contains AI disclosure section
       # Customize the pattern to match your team's disclosure format
       - name: Check AI disclosure in PR
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          PR_BODY="${{ github.event.pull_request.body }}"
           if echo "$PR_BODY" | grep -qi "ai.assist\|ai.usage\|ai.disclosure\|copilot\|cursor\|windsurf\|claude\|chatgpt"; then
             echo "✓ AI usage disclosure detected in PR description"
           else
@@ -164,11 +164,11 @@ jobs:
     steps:
       - name: Check gate results
         run: |
-          if [[ "${{ needs.lint.result }}" == "failure" ]] || \
-             [[ "${{ needs.test.result }}" == "failure" ]] || \
-             [[ "${{ needs.sast.result }}" == "failure" ]] || \
-             [[ "${{ needs.dependency-audit.result }}" == "failure" ]] || \
-             [[ "${{ needs.secrets.result }}" == "failure" ]]; then
+          if [[ "${{ needs.lint.result }}" != "success" ]] || \
+             [[ "${{ needs.test.result }}" != "success" ]] || \
+             [[ "${{ needs.sast.result }}" != "success" ]] || \
+             [[ "${{ needs.dependency-audit.result }}" != "success" ]] || \
+             [[ "${{ needs.secrets.result }}" != "success" ]]; then
             echo "::error::One or more governance gates failed. Merge is blocked."
             exit 1
           fi

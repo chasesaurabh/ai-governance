@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "profile": "team",
+  "projectType": "library",
+  "execution": "guided",
+  "commands": { "test": null, "lint": null, "build": null, "coverage": null, "secrets": null, "sast": null, "audit": null },
+  "thresholds": { "coverage": 80, "reviewers": 1, "functionLines": 80, "complexity": 15 },
+  "riskPaths": { "security": ["src/auth/"], "data": ["src/models/"], "migration": ["migrations/"], "api": ["src/api/"] },
+  "overrides": {}
+}

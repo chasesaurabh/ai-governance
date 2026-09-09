@@ -145,3 +145,7 @@
 | Monthly governance | Tech leads + EM | Monthly | All red KPIs, trend analysis |
 | Quarterly executive | VP Eng + CISO | Quarterly | Executive dashboard, compliance, risk |
 | Annual governance review | All engineering | Annually | Policy effectiveness, updates needed |
+
+## Structured task evidence
+
+Use `ai-governance checklist` and `ai-governance evidence-init` to generate applicable items; validate declared results with `ai-governance evidence-check`. See `ai-governance/EVIDENCE.md` for statuses, scoped exceptions, expiration and completion metrics. This human template remains available for broader organizational review.

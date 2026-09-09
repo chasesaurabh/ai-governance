@@ -49,7 +49,6 @@ stages:
           # Replace with your project's format check
           - script: npm run format:check
             displayName: "Check formatting"
-            continueOnError: true  # Remove once formatter is configured
 
   # ── POL-005: Testing ────────────────────────────────────────────────────
   - stage: Test
@@ -84,14 +83,8 @@ stages:
             condition: always()
 
           # Coverage gate
-          - script: |
-              COVERAGE=$(npx coverage-summary --json | jq '.total.lines.pct')
-              echo "Coverage: ${COVERAGE}%"
-              if (( $(echo "$COVERAGE < $(coverageThreshold)" | bc -l) )); then
-                echo "##vso[task.logissue type=error]Coverage ${COVERAGE}% is below the $(coverageThreshold)% gate (POL-005)"
-                exit 1
-              fi
-            displayName: "Coverage gate ($(coverageThreshold)%)"
+          - script: node examples/ci/check-coverage.cjs coverage/coverage-summary.json $(coverageThreshold)
+            displayName: "Coverage gate"
 
   # ── POL-006: Security — SAST ────────────────────────────────────────────
   - stage: Security
@@ -132,7 +125,7 @@ stages:
 
           # Install and run Gitleaks
           - script: |
-              wget -q https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_8.18.0_linux_x64.tar.gz
+              wget -q https://github.com/gitleaks/gitleaks/releases/download/v8.18.0/gitleaks_8.18.0_linux_x64.tar.gz
               tar -xzf gitleaks_8.18.0_linux_x64.tar.gz
               ./gitleaks detect --source . --verbose
             displayName: "Gitleaks secret scan"

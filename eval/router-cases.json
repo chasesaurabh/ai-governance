@@ -1,0 +1,463 @@
+[
+  {
+    "id": "legacy-1",
+    "prompt": "The login page throws a 500 error after the last deploy",
+    "expected": [
+      "bugfix"
+    ]
+  },
+  {
+    "id": "legacy-2",
+    "prompt": "Add a password reset feature to the auth module",
+    "expected": [
+      "feature"
+    ]
+  },
+  {
+    "id": "legacy-3",
+    "prompt": "Deploy the v2.3 release to production",
+    "expected": [
+      "deploy"
+    ]
+  },
+  {
+    "id": "legacy-4",
+    "prompt": "The API is down and users are getting 503s",
+    "expected": [
+      "incident"
+    ]
+  },
+  {
+    "id": "legacy-5",
+    "prompt": "Is the SQL in our search endpoint safe from injection?",
+    "expected": [
+      "security-review"
+    ]
+  },
+  {
+    "id": "legacy-6",
+    "prompt": "Refactor the payment service to reduce complexity",
+    "expected": [
+      "refactor"
+    ]
+  },
+  {
+    "id": "legacy-7",
+    "prompt": "Review my changes to the auth middleware",
+    "expected": [
+      "review"
+    ]
+  },
+  {
+    "id": "legacy-8",
+    "prompt": "Summarize my staged changes for a commit message",
+    "expected": [
+      "commit"
+    ]
+  },
+  {
+    "id": "legacy-9",
+    "prompt": "Create a new React app with user authentication",
+    "expected": [
+      "new-project"
+    ]
+  },
+  {
+    "id": "legacy-10",
+    "prompt": "Let's switch to a completely different topic",
+    "expected": [
+      "clear-context"
+    ]
+  },
+  {
+    "id": "legacy-11",
+    "prompt": "This used to work yesterday but now it crashes on startup",
+    "expected": [
+      "bugfix"
+    ]
+  },
+  {
+    "id": "legacy-12",
+    "prompt": "Build me an endpoint that returns user activity logs",
+    "expected": [
+      "feature"
+    ]
+  },
+  {
+    "id": "legacy-13",
+    "prompt": "Ship it to staging",
+    "expected": [
+      "deploy"
+    ]
+  },
+  {
+    "id": "legacy-14",
+    "prompt": "SEV1 — database cluster unreachable, error rate at 80%",
+    "expected": [
+      "incident"
+    ]
+  },
+  {
+    "id": "legacy-15",
+    "prompt": "Check this code for XSS vulnerabilities",
+    "expected": [
+      "security-review"
+    ]
+  },
+  {
+    "id": "legacy-16",
+    "prompt": "This function is way too complex, simplify it",
+    "expected": [
+      "refactor"
+    ]
+  },
+  {
+    "id": "legacy-17",
+    "prompt": "What do you think about this implementation?",
+    "expected": [
+      "review"
+    ]
+  },
+  {
+    "id": "legacy-18",
+    "prompt": "git commit",
+    "expected": [
+      "commit"
+    ]
+  },
+  {
+    "id": "legacy-19",
+    "prompt": "Bootstrap a new microservice from scratch",
+    "expected": [
+      "new-project"
+    ]
+  },
+  {
+    "id": "legacy-20",
+    "prompt": "New task — forget everything above",
+    "expected": [
+      "clear-context"
+    ]
+  },
+  {
+    "id": "legacy-21",
+    "prompt": "TypeError: Cannot read properties of undefined (reading 'map') in UserList.tsx:42",
+    "expected": [
+      "bugfix"
+    ]
+  },
+  {
+    "id": "legacy-22",
+    "prompt": "Getting a 404 on /api/v2/orders but /api/v1/orders works fine",
+    "expected": [
+      "bugfix"
+    ]
+  },
+  {
+    "id": "legacy-23",
+    "prompt": "NullPointerException in PaymentService.java line 187",
+    "expected": [
+      "bugfix"
+    ]
+  },
+  {
+    "id": "legacy-24",
+    "prompt": "The tests pass locally but fail in CI with a timeout",
+    "expected": [
+      "bugfix"
+    ]
+  },
+  {
+    "id": "legacy-25",
+    "prompt": "Regression: search results are empty after merging PR #412",
+    "expected": [
+      "bugfix"
+    ]
+  },
+  {
+    "id": "legacy-26",
+    "prompt": "Everything is broken in production right now",
+    "expected": [
+      "incident"
+    ]
+  },
+  {
+    "id": "legacy-27",
+    "prompt": "Alerts firing — latency spike across all services",
+    "expected": [
+      "incident"
+    ]
+  },
+  {
+    "id": "legacy-28",
+    "prompt": "Users are reporting they can't log in, data loss possible",
+    "expected": [
+      "incident"
+    ]
+  },
+  {
+    "id": "legacy-29",
+    "prompt": "Pages are timing out, error rate through the roof",
+    "expected": [
+      "incident"
+    ]
+  },
+  {
+    "id": "legacy-30",
+    "prompt": "Production database is returning connection refused",
+    "expected": [
+      "incident"
+    ]
+  },
+  {
+    "id": "legacy-31",
+    "prompt": "Fix the cart bug and then deploy to staging",
+    "expected": [
+      "bugfix",
+      "deploy"
+    ]
+  },
+  {
+    "id": "legacy-32",
+    "prompt": "Add user search and review my existing auth code",
+    "expected": [
+      "feature",
+      "review"
+    ]
+  },
+  {
+    "id": "legacy-33",
+    "prompt": "Refactor the API layer and commit when done",
+    "expected": [
+      "refactor",
+      "commit"
+    ]
+  },
+  {
+    "id": "legacy-34",
+    "prompt": "This is broken in production, users are impacted",
+    "expected": [
+      "incident"
+    ],
+    "note": "Triage first; no automatically queued code change without an explicit fix request."
+  },
+  {
+    "id": "legacy-35",
+    "prompt": "Clean up the tests and then ship to prod",
+    "expected": [
+      "refactor",
+      "deploy"
+    ]
+  },
+  {
+    "id": "legacy-36",
+    "prompt": "The dashboard looks wrong on mobile",
+    "expected": [
+      "bugfix"
+    ]
+  },
+  {
+    "id": "legacy-37",
+    "prompt": "I want the dashboard to look better on mobile",
+    "expected": [
+      "feature"
+    ]
+  },
+  {
+    "id": "legacy-38",
+    "prompt": "Look at the auth module",
+    "expected": [
+      "review"
+    ]
+  },
+  {
+    "id": "legacy-39",
+    "prompt": "Make the auth module cleaner",
+    "expected": [
+      "refactor"
+    ]
+  },
+  {
+    "id": "legacy-40",
+    "prompt": "Add rate limiting to the auth module",
+    "expected": [
+      "feature"
+    ],
+    "requiredControls": [
+      "CTRL-006.5"
+    ]
+  },
+  {
+    "id": "legacy-41",
+    "prompt": "Something's off with the login",
+    "expected": [
+      "clarify"
+    ]
+  },
+  {
+    "id": "legacy-42",
+    "prompt": "Can you help with the user service?",
+    "expected": [
+      "clarify"
+    ]
+  },
+  {
+    "id": "legacy-43",
+    "prompt": "Let's work on the API",
+    "expected": [
+      "clarify"
+    ]
+  },
+  {
+    "id": "legacy-44",
+    "prompt": "Take a look at this",
+    "expected": [
+      "clarify"
+    ]
+  },
+  {
+    "id": "legacy-45",
+    "prompt": "Improve performance",
+    "expected": [
+      "clarify"
+    ]
+  },
+  {
+    "id": "legacy-46",
+    "prompt": "What does this function do?",
+    "expected": [
+      "explain"
+    ]
+  },
+  {
+    "id": "legacy-47",
+    "prompt": "Explain the difference between REST and GraphQL",
+    "expected": [
+      "explain"
+    ]
+  },
+  {
+    "id": "legacy-48",
+    "prompt": "How do I install Docker on Mac?",
+    "expected": [
+      "explain"
+    ]
+  },
+  {
+    "id": "legacy-49",
+    "prompt": "What's the best way to structure a monorepo?",
+    "expected": [
+      "explain"
+    ]
+  },
+  {
+    "id": "legacy-50",
+    "prompt": "Thanks, that's all for now",
+    "expected": [
+      "explain"
+    ]
+  },
+  {
+    "id": "edge-1",
+    "prompt": "Explain our incident workflow",
+    "expected": [
+      "explain"
+    ]
+  },
+  {
+    "id": "edge-2",
+    "prompt": "What does \"site is down\" mean?",
+    "expected": [
+      "explain"
+    ]
+  },
+  {
+    "id": "edge-3",
+    "prompt": "Review deployment documentation",
+    "expected": [
+      "review"
+    ]
+  },
+  {
+    "id": "edge-4",
+    "prompt": "Add search, do not deploy",
+    "expected": [
+      "feature"
+    ]
+  },
+  {
+    "id": "edge-5",
+    "prompt": "Refactor the API then deploy",
+    "expected": [
+      "refactor",
+      "deploy"
+    ]
+  },
+  {
+    "id": "edge-6",
+    "prompt": "Add authentication",
+    "expected": [
+      "feature"
+    ],
+    "requiredControls": [
+      "CTRL-006.5",
+      "CTRL-017.1"
+    ]
+  },
+  {
+    "id": "edge-7",
+    "prompt": "Update dependencies",
+    "expected": [
+      "dependencies"
+    ]
+  },
+  {
+    "id": "edge-8",
+    "prompt": "Choose an architecture decision",
+    "expected": [
+      "architecture"
+    ]
+  },
+  {
+    "id": "edge-9",
+    "prompt": "Explain how to fix the bug and deploy",
+    "expected": [
+      "explain"
+    ]
+  },
+  {
+    "id": "edge-10",
+    "prompt": "The outage was last week; explain what happened",
+    "expected": [
+      "explain"
+    ]
+  },
+  {
+    "id": "edge-11",
+    "prompt": "Create incident response documentation",
+    "expected": [
+      "docs"
+    ]
+  },
+  {
+    "id": "edge-12",
+    "prompt": "Something unclear",
+    "expected": [
+      "clarify"
+    ]
+  },
+  {
+    "id": "edge-13",
+    "prompt": "Fix a bug first reported last week",
+    "expected": [
+      "bugfix"
+    ]
+  },
+  {
+    "id": "edge-14",
+    "prompt": "Update the README",
+    "expected": [
+      "docs"
+    ]
+  }
+]

@@ -44,3 +44,7 @@
 - **Expired**: TTL reached without renewal
 - **Renewed**: New exception form filed (link to new entry)
 - **Risk materialized**: The risk occurred, triggering incident response
+
+## Structured task evidence
+
+Use `ai-governance checklist` and `ai-governance evidence-init` to generate applicable items; validate declared results with `ai-governance evidence-check`. See `ai-governance/EVIDENCE.md` for statuses, scoped exceptions, expiration and completion metrics. This human template remains available for broader organizational review.

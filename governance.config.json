@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "profile": "team",
+  "projectType": "cli",
+  "execution": "guided",
+  "commands": {
+    "test": "npm test",
+    "build": "npm run check:generated",
+    "audit": "npm audit --audit-level=high"
+  },
+  "riskPaths": {
+    "security": ["lib/installer.js", "examples/ci/", ".github/workflows/"],
+    "dependencies": ["package.json", "package-lock.json"]
+  }
+}

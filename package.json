@@ -4,7 +4,8 @@
   "description": "One-command setup for AI Governance Framework — enforceable policies for AI coding assistants",
   "type": "module",
   "bin": {
-    "ai-governance-setup": "bin/cli.js"
+    "ai-governance-setup": "bin/cli.js",
+    "ai-governance": "bin/governance.js"
   },
   "files": [
     "bin/",
@@ -16,7 +17,10 @@
     ".github/copilot-instructions.md",
     ".aider/",
     "CLAUDE.md",
-    "GOVERNANCE-MATRIX.md"
+    "GOVERNANCE-MATRIX.md",
+    "lib/",
+    "examples/ci/",
+    "install.sh"
   ],
   "keywords": [
     "ai",
@@ -38,9 +42,17 @@
   "author": "chasesaurabh",
   "license": "MIT",
   "engines": {
-    "node": ">=16.7.0"
+    "node": ">=22"
   },
   "dependencies": {
     "inquirer": "^9.2.0"
+  },
+  "scripts": {
+    "test": "node --test",
+    "generate": "node scripts/generate.js",
+    "check:generated": "node scripts/generate.js --check",
+    "check": "npm test && npm run check:generated && npm run evaluate",
+    "evaluate": "node scripts/evaluate.js",
+    "test:package": "node scripts/package-smoke.js"
   }
 }

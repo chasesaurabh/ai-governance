@@ -9,7 +9,7 @@ These templates wire governance policies into your CI/CD pipeline so that policy
 | Platform | File | Policies Enforced |
 |----------|------|-------------------|
 | **GitHub Actions** | `github-actions/governance-gates.yml` | POL-004, 005, 006, 014, 017 |
-| **Azure DevOps** | `azure-devops/governance-gates.yml` | POL-004, 005, 006, 017 |
+| **Azure DevOps** | `azure-devops/governance-gates.yml` | POL-004, 005, 006 (dependency audit; enable SAST separately), 017 |
 
 ## What Gets Enforced
 
@@ -23,6 +23,9 @@ These templates wire governance policies into your CI/CD pipeline so that policy
 | **AI Disclosure** | POL-014 | Missing AI usage disclosure (advisory) |
 
 ## Setup
+
+Copy `examples/ci/check-coverage.cjs` with the templates, preserving that path. Configure your test runner to emit Istanbul JSON summary at `coverage/coverage-summary.json`. Missing or invalid reports fail the gate. These templates require Node.js for this helper.
+
 
 ### GitHub Actions
 
@@ -47,7 +50,7 @@ These templates wire governance policies into your CI/CD pipeline so that policy
 
 GitHub Actions — edit the coverage gate step:
 ```yaml
-if (( $(echo "$COVERAGE < 80" | bc -l) )); then  # Change 80 to your target
+node examples/ci/check-coverage.cjs coverage/coverage-summary.json 80
 ```
 
 Azure DevOps — edit the variable:
